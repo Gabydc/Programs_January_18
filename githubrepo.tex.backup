@@ -1,0 +1,6 @@
+echo "# Programs_January_18" >> README.md
+git init
+git add README.md
+git commit -m "Programs used in January 2018"
+git remote add origin https://github.com/Gabydc/Programs_January_18.git
+git push -u origin master

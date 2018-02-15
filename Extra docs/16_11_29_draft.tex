@@ -1,0 +1,1824 @@
+\documentclass[12pt]{report}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{natbib}
+\usepackage{graphicx} % figuras
+\usepackage[export]{adjustbox} % loads also graphicx
+\usepackage{float}
+\usepackage[font=footnotesize]{caption}
+\usepackage{wrapfig}
+\usepackage{authblk}
+\usepackage{subfigure}
+\usepackage{pifont}
+\usepackage{a4wide}
+\usepackage{array}
+\newcolumntype{?}{!{\vrule width 2pt}}
+\topmargin=-2pt
+% Title Page
+\title{Report}
+\author{Gabriela Berenice Diaz Cortes}
+\date{August 2015}
+
+
+\begin{document}
+\maketitle
+\begin{abstract}
+ This report is written as a complement of the literature study, with the basic concepts that 
+ are important for the research in the project \emph{Physics-based pre-conditioners for 
+ large-scale subsurface flow simulation}.\\
+ The idea of this report is to have a document that will be the basis for the introduction
+ chapter of the thesis, and to have a summary of the concepts for future consultations.
+\end{abstract}
+
+
+\chapter{Linear Algebra}
+
+In this chapter there are some basic concepts about vector and matrices algebra. More detail 
+about this concepts can be found in the references \cite{Saad03,Golub96, Strang09}.
+\section*{Vectors}
+A vector $\mathbf{x} \in \mathbb{R}^n$ is an array of elements $\mathbf{x}_i \in \mathbb{R},$ $i\in \{ i,...,n\}$. A column vector can be written as:
+
+\begin{equation*}
+  \mathbf{x}=
+ \begin{bmatrix}
+\mathbf{x}_1 \\
+ \vdots \\
+\mathbf{x}_n
+ \end{bmatrix}.
+\end{equation*}
+The transpose of a column vector is a row vector and is typically written as:
+
+ \begin{equation*}
+\mathbf{x}^T=
+ \begin{bmatrix}
+\mathbf{x}_1 & \dots\mathbf{x}_n
+ \end{bmatrix}.
+\end{equation*}
+Let $\mathbf{x}, $ $\mathbf{y} $ and $\mathbf{z}\in \mathbb{R}^n$ and $\alpha \in \mathbb{R}$. 
+The basic operations for a vector are:
+\begin{description}
+ \item[Addition]   $\mathbb{R}^{n} \times \mathbb{R}^{n} \xrightarrow{} \mathbb{R}^{n}:$
+$$\mathbf{z}=\mathbf{x}+\mathbf{y},$$ where $$z_{i}=x_{i}+y_{i}.$$
+\item [Scalar-vector multiplication] $\mathbb{R} \times \mathbb{R}^{n} \xrightarrow{} \mathbb{R}^{n}:$
+$$\mathbf{z}=\alpha\mathbf{x},$$ where $$z_{i}=\alpha a_{i}.$$
+\item [Vector multiplication] $\mathbb{R}^{n} \times \mathbb{R}^{n} \xrightarrow{} \mathbb{R}$
+$$\mathbf{z}=\mathbf{x}^T\mathbf{y},$$ where $$z_{i}=\sum_{i=1}^nx_{i}y_{i}.$$
+\end{description}
+\subsection*{Vector Space}
+Let $\mathbf{x}, $ $\mathbf{y} $ and $\mathbf{z}\in \mathbb{R}^n$ and $\alpha, \beta \in \mathbb{R}$. 
+A real vector space is a set of vectors together with the rules for vector addition 
+and multiplication by real numbers. 
+Addition and multiplication must produce vectors in the space and they must satisfy 
+the eight conditions \cite{Strang09}:
+\begin{enumerate}
+ \item[1.] $\mathbf{x} +\mathbf{y} $ = $ \mathbf{y} +\mathbf{x}$.
+\item[2.] $\mathbf{x} +( \mathbf{y} +\mathbf{z})=(\mathbf{x} + \mathbf{y} )+\mathbf{z}.$
+\item[3.] There is a unique “zero vector” such that $\mathbf{x} + \mathbf{0} = \mathbf{x}$ for all $\mathbf{x}$.
+\item[4.] For each $\mathbf{x}$ there is a unique vector $-\mathbf{x}$ such that $\mathbf{x} + (−\mathbf{x}) = 0$.
+\item[5.] $1\mathbf{x}=\mathbf{x}$.
+\item[6.] $(\alpha \beta)\mathbf{x}$ = $\alpha(\beta \mathbf{x}$).
+\item[7.]$ \alpha(\mathbf{x} +\mathbf{y} )$ = $\alpha\mathbf{x} +\alpha \mathbf{y} $.
+\item[8.] $(\alpha +\beta)\mathbf{x}   = \alpha \mathbf{x} +\beta\mathbf{x} .$
+\end{enumerate}
+\subsection*{Vector Subpace}
+A vector subspace is a nonempty subset of a space for wich that satisfies the conditions of the space and for wich the linear combinations of vectors in the subspace stay in the subspace. \\
+Let $\mathbf{x} $  and $\mathbf{y}\in \mathbb{R}^n$be elements of the subspace and $\alpha \in \mathbb{R}$, then:
+\begin{enumerate}
+ \item[i.] $\mathbf{x} +\mathbf{y} $ is in the subspace.
+\item[ii.] $\alpha \mathbf{x}$ is in the subspace.
+\end{enumerate}
+ A subspace is a subset that is “closed” under addition and scalar multiplication. 
+
+\subsection*{Vector Inner Product}
+Let $\mathbf{X}$ be a vector space, $\mathbf{x}$ and $\mathbf{y}\in \mathbf{X}$ and $\alpha$ and $\beta\in\mathbb{R}$. An inner product is a mapping  $\mathbf{X}  \times \mathbf{X}\xrightarrow{}\mathbb{R}$,
+\begin{equation}
+\mathbf{x}, \mathbf{y} \in \mathbf{X} \rightarrow{} s(\mathbf{x},\mathbf{y}) \in \mathbb{R}.
+\end{equation}
+The vector inner product satisfies the next three conditions:\\
+1. It is linear with respect to $\mathbf{x}$, i.e.,
+\begin{equation*}
+ s( \alpha\mathbf{x}_1+ \beta\mathbf{x}_2,\mathbf{y})= \lambda _1 s(\mathbf{x}_1,\mathbf{y})+ \beta s(\mathbf{x}_2,\mathbf{y}), \qquad \forall\mathbf{x}_1,\mathbf{x}_2 \in \mathbf{X}.
+\end{equation*}
+2. Is Hermitian $s(\mathbf{x},\mathbf{y})$ i.e.,
+\begin{equation*}
+ s(\mathbf{y},\mathbf{x})= \overline{s(\mathbf{x},\mathbf{y})}.
+\end{equation*}
+3. Is positive definite, i.e.,
+\begin{equation*}
+ s(\mathbf{x},\mathbf{x})>0, \qquad \forall\mathbf{x} \neq 0.
+\end{equation*}
+Any inner product satisfies the Cauchy-Schwartz inequality:
+\begin{equation*}
+|s(\mathbf{x},\mathbf{y})|^2 \leq s(\mathbf{x},\mathbf{x})s(\mathbf{y},\mathbf{y}).
+\end{equation*}
+For the vector space $\mathbf{X}= \mathbb{R}^n$, the canonical inner product is the
+Euclidean inner product, that is the product of two vectors $(\mathbf{x}_i)_{i=1,\dots ,n}$ and $\mathbf{y}=(\mathbf{y}_i)_i=1,\dots,n$ in $\mathbb{R}^n$
+\begin{equation*}
+ (\mathbf{x},\mathbf{y})=\sum_{i=1}^n\mathbf{x}_i\overline{\mathbf{y}_i},
+\end{equation*}
+A property of the Euclidean inner product is
+\begin{equation*}
+ (\mathbf{A}\mathbf{x},\mathbf{y})=(\mathbf{x},\mathbf{A}^H\mathbf{y}), \qquad \forall\mathbf{x},\mathbf{y} \in \mathbb{R}^n.
+\end{equation*}
+The A-inner product for a vector $\mathbf{x}$ is defined by
+\begin{equation} \label{Aip}
+ (\mathbf{x},\mathbf{x})_\mathbf{A}=\mathbf{x}^T\mathbf{A}\mathbf{x}. 
+\end{equation}
+
+
+
+\section{Matrices}
+A $n\times m$ matrix $\mathbf{A}$ is an array of real numbers $a_{ij} \in \mathbb{R}$  $i=1,2,\dots,n, j=1,2,\dots,m$.
+\begin{equation*}
+\mathbf{A}
+=
+\begin{pmatrix}
+a_{11} & a_{12} & \dots & a_{1n}\\
+a_{21} & a_{22} & \dots & a_{2n}\\
+\hdotsfor{4}\\
+a_{m1} & a_{m2} & \dots &a_{mn}
+\end{pmatrix}
+.
+\end{equation*}
+The space of the matrices of $n\times m$ is denoted by $\mathbb{R}^{n\times m}$ and has the following operations:
+\begin{description}
+ \item[Addition] $\mathbb{R}^{n\times m} \times \mathbb{R}^{n\times m} \xrightarrow{} \mathbb{R}^{n\times m}:$
+$$\mathbf{C}=\mathbf{A}+\mathbf{B},$$ where $$c_{ij}=a_{ij}+b_{ij}.$$
+\item [Scalar-matrix multiplication] $\mathbb{R} \times \mathbb{R}^{n\times m} \xrightarrow{} \mathbb{R}^{n\times m}:$
+$$\mathbf{C}=\alpha \mathbf{A},$$ where $$c_{ij}=\alpha a_{ij}.$$
+\item [Matrix multiplication] $\mathbb{R}^{n\times p} \times \mathbb{R}^{p\times m} \xrightarrow{} \mathbb{R}^{n\times m}$
+$$\mathbf{C}=\mathbf{A}\mathbf{B},$$ where $$c_{ij}=\sum_{k=1}^p a_{ik}b_{kj}.$$
+\end{description}
+Some properties of the matrices are the following:
+\begin{description}
+ \item [The transpose] of a matrix $\mathbf{A} \in \mathbf{R}^{n\times m}$ is:
+$$\mathbf{C}=\mathbf{A}^T,$$
+$$c_{ij}=a_{ji}, \qquad i=1,\dots,m, j=1,\dots,n.$$
+\item[Square matrix.] A matrix $\mathbf{A}\in \mathbb{R}^{n\times m}$ is square if it has the same number of rows and columns $n=m.$
+A special matrix is called the identity matrix, this matrix contains ones in the principal diagonal, and zeros in the rest of the entries.
+This matrix is sometimes written in terms of the Kronecker symbol $\delta_{ij}$ that takes the value of 1 if $i=j$ and zero otherwise.
+$$\mathbf{I}=\{\delta_{ij}\}_{i,j=1,\dots ,n}.$$
+\item[The identity] matrix satisfies $\mathbf{I}\mathbf{A}=\mathbf{A}\mathbf{I}=\mathbf{A}$ for any $\mathbf{A}\in \mathbb{R}^{n\times m}$.
+\item[The inverse] ($\mathbf{A}^{-1}$) of a matrix $\mathbf{A}$ is such that: $$\mathbf{A}\mathbf{A}^{-1}=\mathbf{A}^{-1}\mathbf{A}=\mathbf{I}.$$
+\item[The determinant] of an $n\times n$ matrix is given by:
+$$det(\mathbf{A})=\sum_{j=1}^n a_{1j}det(\mathbf{A}_{1j})$$\\
+where $\mathbf{A}_{1j}$ is a matrix obtained deleting the first row and the $j-th$ column of $\mathbf{A}$, this new matrix
+contains $(n-1)\times (n-1)$ elements.
+\end{description}
+A matrix $\mathbf{A}\in \mathbb{R}^{n\times m}$ is known as singular if $det(\mathbf{A})=0$ and nonsingular if $det(\mathbf{A})\neq 0$.
+Some of the properties of the determinant are the following:
+\begin{itemize}
+\item $det(\mathbf{A}\mathbf{B})=det(\mathbf{A})det(\mathbf{B}).$
+\item $det(\mathbf{A}^T)=det(\mathbf{A}).$
+\item $det(\alpha \mathbf{A})=\alpha^ndet(\mathbf{A}).$
+\item $det(\overline{\mathbf{A}})=\overline{det(\mathbf{A})}.$
+\item $det(\mathbf{I})=1.$
+\end{itemize}
+A matrix $\mathbf{A}\in \mathbb{R}^{n\times m}$ can have a particular structure that can be useful when solving linear systems, some of these structures are
+\begin{itemize}
+\item Symmetric matrices: $\mathbf{A}^T=\mathbf{A}.$
+\item Hermitian matrices: $\mathbf{A}^H=\mathbf{A}.$
+\item Normal matrices: $\mathbf{A}^H\mathbf{A}=\mathbf{A}\mathbf{A}^H.$
+\item Nonnegative matrices: $a_{ij}\geq0, i,j=1,\dots,n.$
+\item Unitary matrices: $\mathbf{Q}^H\mathbf{Q}=\mathbf{I}.$
+\item Diagonal matrices: $a_{ij}=0$, for $i\neq j.$
+\item Upper triangular matrices: $a_{ij}=0$, for $i>j.$
+\item Lower triangular matrices: $a_{ij}=0$, for $i<j.$
+\item Upper bidiagonal matrices: $a_{ij}=0$, for $j\neq i$ or $j\neq i+1.$
+\item Lower bidiagonal matrices: $a_{ij}=0$, for $j\neq i$ or $j \neq i-1.$
+\item Tridiagonal matrices: $a_{ij}=0$, for $|i-j|>1.$
+\item Banded matrices: $a_{ij}\neq 0$ if $i-m_l\leq j \leq i+m_u$, with $m_l,m_u$ two nonnegative integers.
+\item Upper Hessenberg matrices: $a_{ij}=0$ for any $i,j$ such that $i>j+1$.
+\item Positive Definite: $(\mathbf{A}\mathbf{u},\mathbf{u})>0, \qquad \forall u \in \mathbf{R}^n, \qquad u\neq0.$
+\item Symmetric Positive Definite $SPD$. If A is symmetric and Positive Definite.
+\end{itemize}
+\subsection{Eigenvalues and eigenvectors}
+The eigenvalues $\lambda \in \mathbb{R}$ of a square matrix $\mathbf{A} \in C^{n\times n}$ are complex scalars such that 
+$\mathbf{A}\mathbf{u}=\lambda \mathbf{u}$ for $u \in \mathbb{R}^n$. The vector $\mathbf{u}$ is an eigenvector of $\mathbf{A}$ associated with $\lambda$. The $spectrum$ of
+$A$, $\sigma(A)$ is the set of all eigenvalues of $\mathbf{A}$.
+Some definitions and properties related to the eigenvalues of $\mathbf{A}$ are listed below.
+\begin{description}
+\item[The characteristic polynomial] of $\mathbf{A}$ is a function that maps $\lambda$ to the value $$\mathbf{p}_\mathbf{A}(\lambda )=det(\mathbf{A}-\lambda \mathbf{I}),$$ which is a polynomial
+of degree $n$. 
+\item[The spectral radius], $\rho (\mathbf{A})$, is the maximum modulus of the eigenvalues 
+$$\rho(\mathbf{A})=\max_{\lambda\in \sigma(\mathbf{A})}|\lambda|.$$
+\item The scalar $\lambda$ is a root of the characteristic polynomial, and an eigenvalue of $\mathbf{A}$ if and only if $$\mathbf{p}_\mathbf{A}(\lambda )=det(\mathbf{A}-\lambda \mathbf{I})=0.$$
+\item If $\lambda$ is an eigenvalue of $\mathbf{A}$, then $\bar{\lambda}$ is an eigenvalue of $\mathbf{A}^H$.
+\end{description}
+\subsection{Null space and column space.}
+Column space. Let $A \in \mathbb{R}^{n \times m}$ be a non square matrix,
+\begin{equation*}
+A
+=
+\begin{pmatrix}
+a_{11} & a_{12} & \dots & a_{1m}\\
+a_{21} & a_{22} & \dots & a_{2m}\\
+\hdotsfor{4}\\
+a_{n1} & a_{n2} & \dots &a_{nm}
+\end{pmatrix}
+=\begin{pmatrix}
+v_{1} & v_{2} & \dots & v_{m}\\
+\end{pmatrix}, \qquad v_i=
+\begin{pmatrix}
+a_{1i} \\
+a_{2i} \\
+\hdotsfor{1}\\
+a_{ni} 
+\end{pmatrix},
+\end{equation*}
+The set of all possible linear combination of the column vectors $v_i$ 
+of this matrix is called 
+the column space $\mathbf{R}(A)$ or range of $A$.
+$$
+Range(A)=\{c\in\mathbb{R}^m|Ac=c_1v_1+c_2v_2+...+c_mv_m  \}
+$$
+The system $Ax=b$ is solvable if and only if the vector $b$ can be expressed as a
+combination of the columns of $A$, i.e. if $b$ is in the column space of $A$. In this case
+$b=x_1v_1+x_2v_2+...+x_mv_m \in Range(A),$ with $v_i$ the $i-th$ column of $A$.\\
+If we take $b$ and $b'$ in the column space, so that $Ax=b$ for some $x$ and $Ax'=b'$ for
+some $\mathbf{x}$, then $A(x+x')=b+b'$ is also a combination of the columns. The column space
+of all vectors $b$ is closed under addition.
+If $b$ is in the column space of $A$, also is any multiple $cb$. If some combination
+of columns produces $b$, (say $Ax=b$), then multiplying that combination by $c$
+will produce $cb$. In other words, $A(cb)=cb$.\\
+Null space. The null space of a matrix $A$ consist of all the vectors $x$ such that 
+$Ax=0$. It is denoted by $\mathbf{N}(A)$.
+If $Ax=0$ and $Ax'=0$, then $A(x+x')=0$. And if $Ax=0$ then $A(cx)=0$.
+
+\subsection{Vector and matrix norms}
+A \emph{vector norm}, is a function $\mathbb{C}^n \to \mathbb{C}$ that satisfies the following
+conditions:
+\begin{enumerate}
+ \item Positivity
+ \begin{equation*}
+  ||u|| \geq 0 \qquad \forall \qquad u\in \mathbb{R}^n.
+ \end{equation*}
+\item Homogeneity 
+ \begin{equation*}
+  ||cu||=|c|||u||.
+ \end{equation*}
+ \item Triangular inequality
+  \begin{equation*}
+  ||u+v|| \leq ||u|| +||v||.
+ \end{equation*}
+\end{enumerate}
+The $p$ norm of a vector $u\in \mathbb{R}^n$ is defined by
+ \begin{equation*}
+  ||u||_p=\left[ \sum_{i=1}^n|u_i|^p\right]^{\frac{1}{p}}
+ \end{equation*}
+ The most important norms are listed below
+$$||u||_1=|u_1|+|u_2|+...+|u_n|,$$
+$$||u||_2=\left[|u_1|^2+|u_2|^2+...+|u_n|^2\right]^{1/2},$$
+$$||u||_{\infty}=\max_{i=1,...,n}|u_i|.$$
+The $A-norm$ of a vector $x$ is defined as:
+\begin{equation} \label{Anorm}
+ ||x||_A= \sqrt{(x,x)_A}=\sqrt{x^TAx}.
+\end{equation}
+
+The \emph{p-norm} of a matrix $A\in R^{n\times m}$is given by:
+$$||A||_{pq}=\max_{u\in\mathbb{R}^m,u\neq 0}\frac{||Au||_p}{||u||_q}$$
+This norm satisfies the usual properties of a norm:
+ \begin{equation*}
+  ||A||_p \geq 0 ,
+ \end{equation*}
+ \begin{equation*}
+  ||cA||_p=|c|||A||_p.
+ \end{equation*}
+  \begin{equation*}
+  ||A_1+A_2||_p \leq ||A_1||_p +||A_2||_p.
+ \end{equation*}
+ And the \emph{submultiplicative property}
+  \begin{equation*}
+  ||A_1A_2||_p \leq ||A_1||_p ||A_2||_p.
+ \end{equation*}
+ For the case of $p=1,p=2$ and $p=\infty$ there are some expressions that allow us to
+ compute the p-norm.
+\begin{gather*}
+||A||_1=\max_{1\leq j\leq n}\sum_{i=1}^m |r_{ij}| \\
+||A||_2=\max_{1\leq i\leq n} \lambda_k (A^TA)=\lambda_{max}(A^TA) \\
+||A||_{\infty}=\max{1\leq j\leq n}\sum_{j=1}^n |r_{ij}|.
+\end{gather*}
+In the case when A is an $n\times n$ $SPD$ matrix, $||A||_2=\lambda_n(A)$. 
+ The \emph{spectral condition number} of an $n\times n$ matrix $A$ measured in a p-norm is defined as:
+ $$\kappa_p(A)=||A||_p||A^{-1}||_p.$$
+ For the 2-norm this can be:
+ \begin{equation*}
+ \kappa_2(A)=\frac{\sqrt{\lambda_{max}(A^TA)}}{\sqrt{\lambda_{min}(A^TA)}} 
+ \end{equation*}
+If $A$ is $SPD$ this expression becomes
+ \begin{equation*}
+ \kappa_2(A)=\frac{\lambda_{max}(A)}{\lambda_{min}(A)} 
+ \end{equation*}
+The \emph{spectral radius} $\rho(A)$ of a matrix $A \in C^{n\times n}$ is defined as:
+$$\rho(A)=\max_{\lambda_i \in \sigma(A)}|\lambda_i|.$$
+A diagonal dominant matrix $A$ satisfies 
+\begin{equation*}
+ |a_{ii}|>\sum_{j=1,j\neq i}^n|a_{ij}|, \qquad i=1,...,n.
+\end{equation*}
+A matrix $A$ is called irreducible iff it does not exist a permutation matrix P such that
+$PAP^T$ is block upper triangular.
+The matrix $A$ is called irreducibly strictly diagonal dominant if is irreducible and diagonal dominant.
+$Gershgorin's$ $Theorem$ if $\lambda \in \sigma (A)$, then $\lambda$ is located in one of the n closed disks in the 
+complex plane centered in $a_{ii}$, and have a radius
+\begin{equation*}
+ \rho_i=\sum_{j=1,j\neq i}^n |a_{ij}|
+\end{equation*}
+$i.e,$
+\begin{equation*}
+ \lambda \in \sigma (A) \Rightarrow \exists i,\qquad \text{such that } |a_{ii}-\lambda|\leq \rho_i=\sum_{j=1,j\neq i}^n |a_{ij}|
+\end{equation*}
+The matrix $A$ is an $M-matrix$ iff satisfies the following properties:
+\begin{align*}
+\text{1. } &a_{ii}>0 \qquad i=1,...,n. \\
+\text{2. }&a_{ij} \leq 0 \qquad i\neq j, \qquad i, j=1,...,n. \\
+\text{3. }& A \text{ is non-singular.}\\
+\text{4. }&A^{-1} \geq 0
+\end{align*}
+\chapter{System of linear equations}
+The solution of partial differential equations PDE's is sometimes carried out by numerical methods.
+Some of these methods, as the finite elements method, transform our problem into a system of equations of the form:
+\begin{gather*}
+a_{11}x_{1}+a_{12}x_{2}+\dots+a_{1n}x_{n}=b_{1}\\
+a_{21}x_{1}+a_{22}x_{2}+\dots+a_{2n}x_{n}=b_{2}\\
+\dots\\
+\dots\\
+a_{n1}x_{1}+a_{n2}x_{2}+....+a_{nn}x_{n}=b_{n}.
+\end{gather*}
+This system can be written in matrix form as:
+\begin{equation*}
+\begin{pmatrix}
+a_{11} & a_{12} & \dots & a_{1n}\\
+a_{21} & a_{22} & \dots & a_{2n}\\
+\hdotsfor{4}\\
+a_{n1} & a_{n2} & \dots &a_{nn}
+\end{pmatrix}
+\begin{pmatrix}
+x_{1}\\
+x_{2}\\
+\hdotsfor{1}\\
+x_{n}
+\end{pmatrix}
+=
+\begin{pmatrix}
+b_{1}\\
+b_{2}\\
+\hdotsfor{1}\\
+b_{n}
+\end{pmatrix}.
+\end{equation*}
+Or,
+\begin{equation}\label{ls}
+Ax=b
+\end{equation}
+This system can be solve with direct (finite) or iterative (infinite) algorithms. The finite algorithms achieve a final solution, meanwhile the infinite ones
+are stopped if the error is less than a fixed value. The iterative methods not always converge.
+In this section there is a short description of some direct and iterative methods.
+
+If we have a right hand side $b=0$, we always have the solution $x=0$, but it is
+possible to find a infinity of other solutions. If we have a non square matrix
+$A\in \mathbb{R}^{n\times m}$, $n>m$, there are always infinite solutions.
+\subsection*{Triangular Factors}
+If we have a linear system \eqref{ls}, after some operations, we can transform the
+matrix $A$ into an upper triangular matrix, where all the entries below the 
+diagonal are zero.\\
+If A is an square matrix, and its columns are independent, we get a system like the 
+following:
+\begin{equation*}
+U=
+\begin{pmatrix}
+u_{11} & u_{12} & \dots &u_{1(n-1)}& u_{1n}\\
+0 & u_{22} & \dots &u_{2(n-1)} &u_{2n}\\
+\hdotsfor{5}\\
+0 & 0 & \dots &u_{(n-1)(n-1)}& u_{(n-1)n}\\
+0 & 0& \dots&0 &u_{nn}
+\end{pmatrix}
+\end{equation*}
+Where the diagonal elements are the pivots, or the first non zero elements in a row
+that will be use to create the zeros below them.
+If the matrix is not square $A\in\mathbb{R}^{n\times m}$, we will arrive to a matrix of the form:
+\begin{equation*}
+U=
+\begin{pmatrix}
+u_{11} & u_{12} & u_{13}&\dots&u_{1(m-3)} &u_{1(m-2)}&u_{1(m-1)}& u_{1m}\\
+0 & 0 & u_{32}&\dots&u_{2(m-3)} &u_{2(m-2)}&u_{2(m-1)} &u_{2m}\\
+0 & 0 &u_{33} &\dots&u_{3(m-3)} &u_{3(m-2)}&u_{3(m-1)} &u_{3m}\\
+\hdotsfor{5}\\
+0 & 0 & 0&\dots&u_{(n-3)(m-3)}&u_{(n-3)(m-2)} &u_{(n-2)(m-1)}  &u_{(n-2)m}\\
+0 & 0 & 0&\dots&0&u_{(n-2)(m-2)} & u_{(n-2)(m-1)} &u_{(n-2)m}\\
+0 & 0 & 0&\dots&0 &0&0& u_{(n-1)m}\\
+0 & 0& 0&\dots&0&0 &0&0
+\end{pmatrix}.
+\end{equation*}
+The number of rows linearly independent of a matrix $A$ is called the rank of $A$.
+The rank of a matrix $A$ is the number of column vectors linearly independent of $A$,
+then $A$ and $A'$ have the same rank.
+That is the echelon form of the matrix $A$ and has the following characteristics:\\
+1. The pivots are the first non zero entries in their rows.\\
+2. Below each pivot there is a column of zeros.\\
+3. Each pivot lies to the right of the pivot in the row above. \\
+4. The U matrix has a staircase pattern.\\
+5. The last $m-r$ rows are zero rows, with $r$ the rank of the matrix. 
+\subsection*{LU Decomposition Method}
+The idea of this method is to decompose a matrix \emph{A} into two matrices (\emph{LU}) which have the properties:
+\begin{equation}\label{lu}
+ A=LU.
+\end{equation}
+Where $L$ is lower triangular, and $U$ is upper triangular and $l_{ii}=1$.
+Replacing \eqref{lu} in \eqref{ls}, we transform the system into:
+\begin{equation*}
+ LUx=b.
+\end{equation*}
+If we rename $y=Ux$ we get
+\begin{equation*}
+ Ly=b.
+\end{equation*}
+We can solve this equation with \emph{forward substitution} to get the value of $y$ and then solve for $x$ with \emph{back substitution}.
+\begin{equation*}
+ Ux=y.
+\end{equation*}
+
+\section{Direct Methods}
+
+\subsection{Gauss Elimination Method}
+This method is used to get the solution of \eqref{ls} when the matrix $A$ is square, with algebraic operations in the rows of the matrix. This method consists in two steps. The first one is known as \emph{Forward elimination}:
+we transform the \emph{A} matrix into a upper triangular matrix \emph{A'}. Then, we perform the \emph{Back substitution}: now that our matrix \emph{A'} is upper triangular, the last equation is of the form
+$a_{nn}x_n=b_n$. With this equation we can find the value of $x_n$ and by substitution in the previous equations we can solve the complete system.
+Each time that we perform an operation in a $i$ row of the matrix \emph{A} we need to modify by the same amount the entry $b_i$ to preserve the original system. To do this in a faster way we can add a
+column to the matrix \emph{A} with the vector \emph{b}, with this new matrix we can ensure that the system will remain the same after the triangulation of the matrix \emph{A}.
+Our original system is:
+\begin{equation*}
+\begin{pmatrix}
+a_{11} & a_{12} & \dots & a_{1n}\\
+a_{21} & a_{22} & \dots & a_{2n}\\
+\hdotsfor{4}\\
+a_{n1} & a_{n2} & \dots &a_{nn}
+\end{pmatrix}
+\begin{pmatrix}
+x_{1}\\
+x_{2}\\
+\hdotsfor{1}\\
+x_{n}
+\end{pmatrix}
+=
+\begin{pmatrix}
+b_{1}\\
+b_{2}\\
+\hdotsfor{1}\\
+b_{n}
+\end{pmatrix},
+\end{equation*}
+where
+\begin{equation*}
+A=
+\begin{pmatrix}
+a_{11} & a_{12} & \dots & a_{1n}\\
+a_{21} & a_{22} & \dots & a_{2n}\\
+\hdotsfor{4}\\
+a_{n1} & a_{n2} & \dots &a_{nn}
+\end{pmatrix},
+\qquad B=
+\begin{pmatrix}
+b_{1}\\
+b_{2}\\
+\hdotsfor{1}\\
+b_{n}
+\end{pmatrix}.
+\end{equation*}
+Adding the vector \emph{B} to the \emph{A} matrix, the new matrix will be:
+\begin{equation*}
+A'=
+\begin{pmatrix}
+a_{11} & a_{12} & \dots & a_{1n} & b_1\\
+a_{21} & a_{22} & \dots & a_{2n} & b_2\\
+\hdotsfor{5}\\
+a_{n1} & a_{n2} & \dots &a_{nn} & b_n
+\end{pmatrix}.
+\end{equation*}
+We transform this matrix into an upper triangular matrix by making zero the entries below the main diagonal.
+This can be achieve making the following operations for all the rows below the main diagonal:
+\begin{equation*}
+a_{j:}=a_{j:}-a_{i:}*\frac{a_{ji}}{a_{ii}}. \qquad \footnote{The ``:'' means that we take the hole \emph{j}-row if we have $a_{j:}$ or the hole \emph{j}-column if we have $a_{:j}$}
+\end{equation*}
+Sometimes it happens that the elements in the main diagonal $a_{ii}$ are much smaller, or even zero, than other element in the column in which they are $a_{:i}$. This can leads to some inaccurate solutions
+when we perform the operation $\frac{1}{a_{ii}}$.
+To avoid these small terms, it's necessary to move the row $a_{j:}$ with the largest coefficient in the column \emph{i} to the row \emph{i}, in such a way that the element in the main diagonal
+$a_{ii}$ is the largest element in the column $a_{:i}$. This movement is called \emph{pivoting}.  
+After the \emph{forward elimination}, using pivoting, we obtain a matrix \emph{A''} of the form:
+\begin{equation*}
+A''=
+\begin{pmatrix}
+a'_{11} & a'_{12} & a'_{13} &\dots & a'_{1(n-2)} & a'_{1(n-1)} & a'_{1n} & b'_1\\
+0 & a'_{22}  & a'_{23} &\dots & a'_{2(n-2)} & a'_{2(n-1)} & a'_{2n} & b'_2\\
+\hdotsfor{8}\\
+0 & 0 & &0 \dots &0 &a'_{(n-1)(n-1)}&a'_{(n-1)n} & b'_{n-1}\\
+0 & 0 & &0\dots &0  &0& a'_{nn} & b'_n
+\end{pmatrix}.
+\end{equation*}
+When we have the upper triangular matrix, we can start the \emph{back substitution} solving the system from the \emph{n}-equation, and upwards.
+The $x_n$ can be compute in the following way:
+\begin{equation*}
+\mathbf{x}_{n}=\frac{b'_n}{a'_{nn}}.
+\end{equation*}
+The other $x_i's$ can be computed from the previous ones that are already known.
+\begin{equation*}
+x_i=\frac{b'_i-\sum_{j=i+1}^n a'_{ij}x_{j}}{a'_{ii}}
+\end{equation*}
+
+
+\subsection{LU Decomposition Method}
+The idea of this method is to decompose a matrix \emph{A} into two matrices (\emph{LU}) which have the properties:
+\begin{equation}\label{lu}
+ A=LU.
+\end{equation}
+Where $L$ is lower triangular, and $U$ is upper triangular and $l_{ii}=1$.
+Replacing \eqref{lu} in \eqref{ls}, we transform the system into:
+\begin{equation*}
+ LUx=b.
+\end{equation*}
+If we rename $y=Ux$ we get
+\begin{equation*}
+ Ly=b.
+\end{equation*}
+We can solve this equation with \emph{forward substitution} to get the value of $y$ and then solve for $x$ with \emph{back substitution}.
+\begin{equation*}
+ Ux=y.
+\end{equation*}
+
+
+\subsection{Cholesky Decomposition for Symmetric Positive Definite Systems}
+In a linear system \eqref{ls}, if the matrix $ A \in \mathbf{R} ^{n\times n} $ is symmetric positive definite (SPD), there is a lower triangular matrix
+$ L\in\mathbf{R}^{n\times n} $ with positive diagonal entries such that $ A=L{L}^{T} $. This is called the Cholesky factorization and $L$ is known as
+the Cholesky factor.
+The entries of the L matrix can be computed as follow:
+\begin{gather*}
+l_{11}=\sqrt{a_{11}}\\
+l_{ki}=\frac{a_{ik}-sum_{j=1}^{i-1}l_{ij}l_{kj}}{l_{ii}}\qquad i=1,2,...k-1, \qquad k=2,3,...,n,\qquad i \neq k\\
+l_{kk}=\sqrt{a_{kk}-\sum_{j=1}^{k-1}l_{kj}^2}
+\end{gather*}
+If the matrix is sparse, some entries that are zero in the lower triangular part of the matrix $A$ might be nonzero in $L$. These new nonzero entries are known as fill-in.
+We can construct an incomplete factorization that has the same nonzero entries that the matrix $A$. This will be an incomplete factorization $L_0$. As there are
+some missing entries in the factorization $L_0L_0^T\neq A$.
+This incomplete factorization can be improved by allowing some fill-in in the $L_0$ matrix, $i.e.$, we can construct a new $L_k$ matrix taking some nonzero entries that are zero in the $A$ matrix.
+The $k$ index, is the level of fill-in allowed for the $L_k$ matrix, the matrix with the greatest $k$ is the L matrix obtained from the Cholesky factorization.
+
+
+\section{Iterative Methods}
+When we want to solve a linear system $Ax=b$, where the coefficient matrix $A$ is $sparse$,
+the iterative methods are an alternative that uses less computer storage and computation time.
+In an iterative method, we start with a guess solution $\mathbf{x^0}$ and we try to approximate
+the solution $\mathbf{x}$.
+It is possible to decompose the matrix $A$ into it's diagonal $D$, strict lower $-E$ and strict
+upper parts $-F$. 
+$$A=D-E-F$$
+The methods presented in this section can be described in terms of these parts.
+When we want to solve a linear system of the form $$Ax=b,$$ setting $A=M-N$, we can write the system as follows:
+\begin{equation*}
+Ax=(M-N)x=b,
+\end{equation*}
+or
+\begin{equation*}
+Mx=(N)x+b=(M-A)x+b.
+\end{equation*}
+
+This new system can be used to perform an iterative process
+\begin{equation*}
+Mx^{k}=(M-A)x^{k-1}+b \qquad 1\leq k, 
+\end{equation*}
+or
+\begin{equation}
+\mathbf{x}^{k}=M^{-1}(M-A)x^{k-1}+M^{-1}b. \label{Qxk}
+\end{equation}
+The initial vector $x^{0}$ is an initial guess of the solution. The iterative method in \eqref{ls}
+converges if it converges for any initial vector $x^{0}$. We can compute a sequence of vectors $x^{1},x^{2},\dots,x^{n}$  
+ from \eqref{Qxk}, and we need to choose $M$ that:
+\begin{itemize}
+\item{1} The sequence $[x^{k}]$ is easily computed.
+\item{2} The sequence $[x^{k}]$ converges rapidly to a solution.
+\end{itemize}
+To prove this we can take $\mathbf{x}$ from \eqref{Qxk}
+\begin{equation*}
+x=M^{-1}(M-A)x+M^{-1}b=(I-M^{-1}A)x+M^{-1}b.
+\end{equation*}
+
+For an iteration $x^{k}$ with the solution $x$ we have:
+\begin{equation*}
+x^k-x=(I-M^{-1}A)(x^{k-1}-x),
+\end{equation*}
+taking the absolute value of this equation:
+\begin{equation*}
+||x^k-x||=||(I-M^{-1}A)(x^{k-1}-x)|| \leq ||(I-M^{-1}A)||||(x^{k-1}-x)||,
+\end{equation*}
+repeating this we have:
+\begin{equation*}
+||x^k-x||\leq ||(I-M^{-1}A)||^k||(x^0-x)||,
+\end{equation*}
+If $||(I-M^{-1}A)||<1$, then
+\begin{equation*}
+lim_{k \rightarrow \infty}||x^k-x||=0.
+\end{equation*}
+In each iteration we have an error vector, which is the distance to the solution 
+$$e^k=x-x^k.$$
+As the error takes into account the exact solution $x$, computing the error is equivalent to computing the 
+solution, to have an idea of the error, we can compute the residual, defined as:
+$$r^k=b-Ax^k.$$
+This leads to the next equation between the residual and the error:
+$$Ae^k=r^k.$$
+As we see before, we can write $x^{k+1}$ as:
+$$x^{k+1}=M^{-1}(M-A)x^k+M^{-1}b=(I-M^{-1}A)x^k+M^{-1}b=x^k+M^{-1}(b-Ax^k),$$
+replacing $r^k$ we have
+$$x^{k+1}=x^k+M^{-1}r^k.$$
+If $A$ is sparse, each iteration requires $\mathcal{O}(cN)$ instead of $\mathcal{O}(N^2)$ flops for dense matrices.
+The error can be written in recursive form as:
+\begin{align*}
+e^{k+1}&=\mathbf{x}-x^k\\
+&=x-x^k-M^{-1}r^k\\
+&=e^k-M^{-1}Ae^k\\
+&=(I-M^{-1}A)e^k
+\end{align*}
+For the residual vector we have:
+\begin{align*}
+r^{k+1}&= b-Ax^{k+1}\\
+&=b-Ax^k-AM^{-1}r^k\\
+&=r^k-AM^{-1}r^k\\
+&=(I-AM^{-1})r^k.
+\end{align*}
+Where $(I-M^{-1}A)$ and $(I-AM^{-1})$ are the error and residual propagation matrices.
+\subsection{Richardson Method}
+If $M$ in \eqref{Qxk} is the identity matrix, then:
+\begin{gather*}
+x^k=(I-A)x^{k-1}+b=x^{k-1}+r^{k-1}, \\
+r^{k-1}=b-Ax^{k-1}.
+\end{gather*}
+
+
+\subsection{Jacobi Method}
+If the matrix \emph{A} that we want to solve is sparse, the solution $x$ can be obtained solving the system for each $x_i$
+ replacing the initial guess $\mathbf{x^0}$ in the original system \eqref{ls}.
+\begin{equation*}
+x^1_i=\frac{b_i-\sum_{j=1}^n a_{ij}x^0_{j}}{a_{ii}},\qquad for\qquad a_{ij}\neq 0, \qquad i=1,\dots,n.
+\end{equation*}
+This can be rewritten as:
+\begin{equation*}
+\mathbf{x}^{k+1}=D^{-1}(E+F)x^k+D^{-1}b.
+\end{equation*}
+Where $M=D$ and $N=E+F$.This process is repeated, using the new values of $\mathbf{x}$ which are $\mathbf{x^1}$ as initial guess, until the $x^{k+1}$ obtained with
+the iterative method converge to the solution within a specified tolerance $\epsilon$.
+\begin{equation*}
+max |\frac{x_i^{k+1}-x_i^k}{x_i^{k+1}}|\times 100 \% < \epsilon.
+\end{equation*}
+This method allows to update all components of $x^k$ independently from each other, so, it can be
+computed in parallel form.
+The error propagation of this method $(M=D)$ is:
+\begin{align*}
+ B_{JAC}&=I-M^{-1}A=I-D^{-1}(D-E-F)\\
+ &=I-I+D^{-1}E+D^{-1}F\\
+ &=L+U.
+\end{align*}
+\subsubsection{Damped Jacobi Method}
+In the damped Jacobi method, there is a damping parameter $\omega$ and $M_{JAC\omega}=\frac{1}{\omega}D$.
+\subsection{Gauss-Seidel Iteration Method}
+This method is similar to the Jacobi method. In this case the convergence of the method is faster. Each iteration gives some new values for the approximation $x_i's$.
+If we want to compute a new $x_i^k$ and the previous $x_{1...(i-1)}^k$ have been computed, we can use these values to get the solution faster, using them to compute the
+$x_i^k$ with this values obtained in this iteration, as well as the values obtained in the previous one that have not been computed yet.
+\begin{equation*}
+x^k_i=\frac{1}{a_{ii}}(b_i-\sum_{j=1}^{i-1}a_{ij}x_{j}^{k}-\sum_{j=i+1}^{n}a_{ij}x_{j}^{k-1}), \qquad i=1,\dots,n.
+\end{equation*}
+or,
+\begin{equation*}
+\mathbf{x}_{k+1}=(D-E)^{-1}Fx_k+(D-E)^{-1}b.
+\end{equation*}
+In this case $M=D-E$ and $N=F$
+This method uses the recently computed $x^{k+1}$ vectors, therefore it converges faster than the Jacobi's Method.
+\subsection{Successive Over-relaxation Method}
+If we want to increase the convergence of the method, this can be done by adding a weight factor in the solutions computed in the previous iteration
+and the current iteration. This method is known as successive over-relaxation, and the weight factor is $\omega$.
+\begin{equation*}
+x^k_i=\frac{1}{a_{ii}}\omega(b_i-\sum_{j=1}^{i-1}a_{ij}x_{j}^{k})-(1-\omega)\sum_{j=i+1}^{n}a_{ij}x_{j}^{k-1}), \qquad i=1,\dots,n.
+\end{equation*}
+The error propagation of this method $(M=D-E)$ is:
+\begin{align*}
+ B_{GS}&=I-M^{-1}A=I-(D-E)^{-1}(D-E-F)\\
+ &=I-I+(D-E)^{-1}F\\
+ &=(D-E)^{-1}DD^{-1}F\\
+&=(I-L)^{-1}U.
+\end{align*}
+
+\subsection{Chebyshev Method}
+If we use an iterative method to solve  the equation \eqref{ls}, we get the solution $u^1, u^2, \dots, u^k$. A way to improve the convergence of an iterative method
+is to find a new iteration that will accelerate the convergence of the previous method. This can be done by determining coefficients
+$\gamma_{j}(k), j=0,\dots,k$ such that:
+$$y^k=\sum_{j=0}^k \gamma_{j}(k) u^j,$$
+these coefficients must satisfy: $$\sum_{j=0}^k \gamma_{j}(k)=1.$$
+The problem now is to choose the $\gamma_j(k)$ so that the error $y^k-u$ is minimized.
+Taking the error of the k-iteration as $e^k=u^k-u$, such that $e^{(k+1)}=Q^ke^0$, the error will be given by:
+\begin{equation*}
+y^k-u=\sum_{j=0}^k \gamma_j(k)(u^j-u)=\sum_{j=0}^k\gamma_jQ^je^0.
+\end{equation*}
+Taking $p_k(z)=\sum_{j=0}^k\gamma_j(k)z^j$ with $p_k(1)=1$, we get the 2-norm of the error:
+\begin{equation*}
+ ||y^k-u||_2=||\sum_{j=0}^k\gamma_jQ^je^0||_2=||p_k(Q)e^0||_2 \leq||p_k(Q)||_2||e^0||_2
+\end{equation*}
+Taking $e^0=u^0-u$ this equation is:
+\begin{equation*}
+ ||y^k-u||_2\leq ||p_k(Q)||_2||u^0-u||_2
+\end{equation*}
+The goal is to minimize $||p_k(Q)||_2$ for all polynomials. If Q is symmetric with eigenvalues $\lambda_i$, such that
+$\alpha \leq \lambda_n \leq \dots \leq \lambda_1 \leq \beta <1$, then:
+%\DeclareMathOperator{\max}{max}
+%\DeclareMathOperator{\min}{min}
+\begin{equation*}
+||p_k(Q)||_2=\max_{\lambda_i}|p_k(\lambda_i)| \leq \max_{a<\lambda<\beta}|p_k(\lambda)|.
+\end{equation*}
+If we want that $p_k(Q)$ be small, it's necessary a polynomial $p_k(z)$ that is small on $[\alpha,\beta]$ with the condition of $p_k(1)=1$.
+The Chebyshev polynomials are of the form:
+\begin{gather*}
+ c_0(z)=1,\\
+ c_1(z)=z,\\
+ c_j(z)=2zc_{j-1}(z)-c_{j-2}(z).
+\end{gather*}
+With these polynomials we can construct new ones of he form:
+\begin{equation}
+ p_k(z)=\frac{c_k(-1+2\frac{z-\alpha}{\beta-\alpha})}{c_k(1+2\frac{1-\beta}{\beta-\alpha})}
+\end{equation}
+Which satisfies $p_k(1)=1$ and leads to
+\begin{equation*}
+||y^k-u||_2\leq \frac{||u-u^0||_2}{|c_k(1+2\frac{1-\beta}{\beta-\alpha})|}
+\end{equation*}
+It is possible to find a three term recurrence from the Chebyshev recursive polynomials:
+\begin{equation*}
+ y^0=u^0
+\end{equation*}
+solve $z^0$ from $Bz^0=b-Ay^0$ then $y^1$ is given by
+\begin{equation*}
+y^1=y^0+\frac{2}{2-\alpha-\beta}z^0
+\end{equation*}
+solve $z^1$ from $Bz^k=b-Ay^k$ then $y^{k+1}$ is given by
+\begin{equation*}
+y^{k+1}=\frac{4-2\beta-2\alpha}{\beta-\alpha}\frac{c_k(1+2\frac{1-\beta}{\beta-\alpha})}{c_{k+1}(1+2\frac{1-\beta}{\beta-\alpha})}(y^k-y^{(k-1)}+\frac{2}{2-\alpha-\beta}z^k)+y^{(k-1)}.
+\end{equation*}
+
+
+\section{Krylov subspaces}
+If we have two subspaces $\mathcal{K}_k, \mathcal{L}_k$ of $R^n$ and we want to solve the equation $Ax=b$, with $A \in R^{n\times n}$ we can use a projection method onto $\mathcal{K}_k$.
+This method allows us, from an arbitrary initial condition $x^0$, to find an approximate solution $x^k$ in the subspace $\mathcal{K}_k+x^0$,
+such that the residual $r^0=b-Ax^0$ is orthogonal to the subspace $\mathcal{L}_k$:
+\begin{equation}
+\mathbf{x}^k \in \mathcal{K}_k+x^0, \qquad r^k=b-Ax^k \perp \mathcal{L}_k. \label{KSS}
+\end{equation}
+From (\ref{Qxk}) we have the recurrence relation for an iterative method:
+\begin{equation*}
+\mathbf{x}^{k+1}=x^k+B^{-1}r^k, \qquad r^k=b-Ax^k.
+\end{equation*}
+With the initial guess solution $x^0$ we can compute the approximations as follows:
+\begin{align*}
+x^1&=x^0+(B^{-1}r^0),\\
+x^2&=x^1+(B^{-1}r^1)=x^0+(B^{-1}r^0)+x^0+B^{-1}(b-Ax^0-AB^{-1}r^0)\\
+&=x^0+2B^{-1}r^0-B^{-1}AB^{-1}r^0,\\
+\vdots
+\end{align*}
+We can see that this iterative method can be written as:
+\begin{equation*}
+x^k \in\mathbf{x}^0+span\{B^{-1}r^0,B^{-1}A(B^{-1}r^0),\dots,(B^{-1}A)^{k-1}(B^{-1}r^0)\}.
+\end{equation*}
+If the $x^k$ and the $r^k$ satisfy \eqref{KSS}, the $x^k$ is in subspace $\mathcal{K}_k(A,r^0)$, which is called the Krylov subspace of dimension $k$, of the matrix $A$ and residual $r^0$.\\
+
+
+\subsection{Arnoldi's Method}
+With the Arnoldi’s method, we can construct an orthonormal basis $V=[v_1,v_2,\dots, v_k]$ from the Krylov subspace $\mathcal{K}_k(A,r^0)$.
+The vector $v_i$ will be computed by performing the multiplication of the previous vector $v_{i-1}$ with the matrix A, and the orthonormalization of the resulting vector $w_i$ against the previous $v$’s by the Gram-Schmidt method. The basis is computed as follows:
+\begin{gather*}
+h_{ij}=(Av_j,v_i)\qquad j=1,2,\dots, k,\qquad i=1,2,\dots,j,\\
+w_j=Av_j-\sum_{i=1}^jh_{ij}v_i,\\
+h_{j+1,j}=||w_j||_2,\\
+v_{j+1}=\frac{w_j}{h_{j+1,j}}.
+\end{gather*}
+The resulting matrix $H$ with coefficients $h_{ij}$ is a Hessenberg matrix  whose eigenvalues can provide an approximation to the eigenvalues of the matrix $A$.
+\begin{equation*}
+H=
+\begin{pmatrix}
+h_{11} & h_{12} &\dots  & h_{1k} \\
+h_{21} & h_{22} &\dots  & h_{2k} \\
+\hdotsfor{4}\\
+0  &0 &\dots  &h_{(k-1)k} \\
+0   &0 &\dots & h_{mm}
+\end{pmatrix}.
+\end{equation*}
+The basis $V$ can be constructed from the initial residual $r^0=b-Ax^0$, taking the first vector $v_1$ as
+$v_1=\frac{r^0}{||r^0||_2}$.
+
+
+\subsection{Lanczos Method}
+If the matrix $A$ used in the Arnoldi's method is real and symmetric, the Hessenberg matrix $H$ obtained is tridiagonal and symmetric $T_m$.
+\begin{equation*}
+T_m=
+\begin{pmatrix}
+\alpha_{1} & \beta_{2}  \\
+\beta_{2} & \alpha_{2} &\beta_3 \\
+\hdotsfor{7}\\
+ & & & &\beta_{k-1} &\alpha_{k-1} &\beta_m \\
+ & & & &\beta_m & \alpha_{k}
+\end{pmatrix}.
+\end{equation*}
+Where
+\begin{equation*}
+ \alpha_j=h_{jj}, \qquad \beta_j=h_{j-1,j}=h_{j,j-1}.  
+\end{equation*}
+
+
+\subsection{Conjugate Gradient Method}
+If we have a $SPD$ matrix $A$, we can construct a basis $V_k=[v_1,...,v_k]$, where 
+$$x^{k+1} \in\mathbf{x}^0+\mathbf{K}_k(A,r^0),$$ $r^0=b-Ax^0$, such that
+$$||x-x^k||_A, \footnote{\text{See eq. \eqref{Anorm} for the A-norm definition.}}$$ 
+is minimal. 
+In this method we need to find search directions $p^k$, such that they are conjugated with 
+respect to A, i.e., $(Ap^k,p^j)\footnote{\text{See eq. \eqref{Aip}.}}=0 ,$ $k\neq j,$ and the residuals form an orthogonal set, i.e.,
+$(r^k,r^j)=0,$ $k \neq j$.\\
+Given an initial guess $x^0$ the following iterations can be computed following the search direction $p^i$ 
+$$x^{k+1}=x^k+\alpha_kp^k.$$ 
+For the first iteration $x^1$, if we take $x^0=0$ for simplicity, we can compute the A-norm of
+$||x-x^1||_A^2$ as follows:
+\begin{gather*}
+||x-x^1||_A^2=||x-\alpha_0p^0||_A^2=(x-\alpha_0Ap^0)^T(Ax-\alpha_0Ap^0)=\\
+=x^TAx-2\alpha_0(p^0)^TAx+\alpha_0^2(p^0)^TA(p^0),
+\end{gather*}
+which is minimal if $\frac{\partial||x-x^1||_A^2}{\partial \alpha_0}=0,$
+then $$-2(p^0)^TAx+2\alpha_0(p^0)^TA(p^0)=0,$$
+resulting in $$\alpha_0=\frac{(p^0)^TAx}{(p^0)^TAp^0}=\frac{(p^0)^Tb}{(p^0)^TAp^0}=\frac{(p^0)^Tb}{(p^0,p^0)_A}$$
+And the new search directions can be computed via the residuals,
+$$p^{k+1}=r^{k+1}+\beta_kp^k,$$
+where 
+$$ \beta_k=\frac{(r^{k+1},r^{k+1})}{(r^k,r^k)}.$$
+After $k+1$ iterations of the $CG$ method, the error of the iteration will be bounded by
+\begin{equation*}
+ ||x-x^{k+1}||_A\leq 2||x-x^{0}||_A \left( \frac{\sqrt{\kappa(A)}-1}{\sqrt{\kappa(A)}+1} \right)^{k+1}.
+\end{equation*}
+
+
+\subsection{Preconditioning}
+The preconditioning transforms the original linear system, into a new one with the same solution and easier to solve
+with an iterative solver. For the preconditioning it is necessary to find a preconditioning matrix M. From \eqref{Qxk} we can see that
+\begin{equation*}
+\mathbf{x}^{k+1}=M^{-1}(M-A)x^{k}+M^{-1}b,
+\end{equation*}
+This iteration can be regarded as the system:
+$$(I-M^{-1}(M-A))x=M^{-1}(A)x=M^{-1}b.$$
+Which has the same solution as the original one, and is called a $preconditioned$ $system$, where
+$M$ is the \emph{preconditioning matrix}.
+This \emph{preconditioning matrix} can be applied in three different ways:
+\begin{itemize}
+\item{From the left} 
+$$M^{-1}Ax=M^{-1}b$$
+\item{To the right}
+$$AM^{-1}u=b, \qquad\mathbf{x}\equiv M^{-1}u.$$
+\item{Splitting the preconditioner.} If the preconditioning matrix $M$ can be factored in triangular matrices $M_L, M_R$:
+$$M^{-1}_LAM_R^{-1}u=M_L^{-1}b, \qquad\mathbf{x}\equiv M_R^{-1}$$
+\end{itemize}
+After $i+1$ iterations, the error of the iteration will be bounded by
+\begin{equation*}
+ ||x-x^{i+1}||_A\leq 2||x-x^{0}||_A \left( \frac{\sqrt{\kappa(M^{-1}A)}-1}{\sqrt{\kappa(M^{-1}A)}+1} \right)^{i+1}.
+\end{equation*}
+
+
+\subsection{Deflation}
+Given an SPSD matrix $A \in \mathbf{R}^{n \times n}$, the deflation matrix ($P$) is defined as follows:
+$$P=I-AQ, \qquad P \in \mathbf{R}^{n \times n}, \qquad Q \in \mathbf{R}^{n \times n},$$
+where
+$$Q=ZE^{-1}Z^T, \qquad Z \in \mathbf{R}^{n \times k}, \qquad E \in \mathbf{R}^{k \times k}, $$
+with
+$$E=Z^TAZ.$$
+The matrix $E$ is known as the $Galerkin$ or $coarse$ matrix. The full rank matrix $Z$ is called the $deflation-subspace$ matrix, 
+and it's $k<n$ columns are the
+$deflation$ vectors or $projection$ vectors.
+Some properties of the previous matrices are \cite{Tang08} :
+\begin{enumerate}
+ \item[a)] $E^T=E, \qquad symmetric.$
+ \item[b)] $Q^T=Q=QAQ, \qquad symmetric.$
+ \item[c)] $QAZ=Z.$
+ \item[d)] $PAQ=\mathbf{0}_{n\times n}.$
+ \item[e)] $P^2=P.$
+ \item[f)] $AP^T=PA.$
+ \item[g)] $(I-P^T)x=Qb.$
+ \item[h)] $PAZ=\mathbf{0}_{n\times k}.$
+ \item[i)] $P^TZ=\mathbf{0}_{n\times k}.$
+ \item[j)] $PA$ is SPSD. 
+\end{enumerate}
+
+\subsubsection{Deflated CG Method}
+If we have the linear system $Ax=b$, we can use the deflation matrix to find the solution of the system. We start from 
+the expression $x=Ix-(P^{T}+P^{T})x$, rearranging terms we get:
+$$x=(I-P^T)x+P^Tx=Qb+P^Tx, $$
+multiplying by A the previous expression and using the fact that $Q=I-P^{T}$, after some algebra, it becomes
+$$b=AQb+PAx,$$
+then
+$$(I-AQ)b=Pb=PAx.$$
+Which is not necessarily a solution of the original system, but a solution of the deflated system:
+$$PA\hat{x}=Pb.$$
+This system can be solved with the CG, for $\hat{x}$, the deflated solution, which satisfies $P^T\hat{x}=P^Tx$, with $x$ the solution of the linear system.
+This solution can be obtained from \cite{Tang08}:
+$$x=Qb+P^T\hat{x}.$$
+
+\subsubsection{Deflated PCG Method}
+If the deflated linear system is preconditioned by a matrix $M$, such that
+\begin{equation*}
+ \tilde{A}=M^{-\frac{1}{2}}AM^{-\frac{1}{2}}, \qquad \hat{\tilde{x}}=M^{\frac{1}{2}}\hat{x}, \qquad
+ \tilde{b}=M^{-\frac{1}{2}}b
+\end{equation*}
+The deflated preconditioned system that should be solved with the CG is:
+$$\tilde{P} \tilde{A} \hat{\tilde{x}}=\tilde{P}\tilde{b},$$
+where:
+\begin{equation*}
+ \tilde{P}=I-\tilde{A}\tilde{Q}, \qquad \tilde{Q}=\tilde{Z}\tilde{E^{-1}}\tilde{Z^T}, \qquad
+ \tilde{E}=\tilde{Z^T}\tilde{A}\tilde{Z}.
+\end{equation*}
+This method is called the deflated preconditioned conjugate gradient $DPCG$, and the error is bounded by:
+\begin{equation*}
+ ||x-x^{i+1}||_A\leq 2||x-x^{0}||_A \left( \frac{\sqrt{\kappa(M^{-1}PA)}-1}{\sqrt{\kappa(M^{-1}PA)}+1} \right)^{i+1},
+\end{equation*}
+with $\kappa=\frac{\lambda_{max}(M^{-1}PA)}{\lambda_{min}(M^{-1}PA)},$ the effective condition number, and $\lambda_{min}(M^{-1}PA)$ the smallest non zero eigenvalue.\\
+If $M^{-1}$ have eigenvalues $\{\lambda_i\}$ with corresponding orthonormal eigenvectors
+ $\{v_i\}$, and $Z={[ v_{1} v_{2}... v_{k}]}$, some properties of the $DPCG$ method are:
+\begin{enumerate}
+ \item  $\tilde{P} \tilde{A} \tilde{v_i}= \begin{cases} 0, & i=1,...,k\\ \lambda_i\tilde{v_i}, & i=k+1,..,n \end{cases}$
+ \item $\sigma(M^{-1}PA)=\{0,..,0,\lambda_{k+1},...,\lambda_n\}$
+ \item $\kappa(M^{-1}PA) \leq \kappa(M^{-1}A).$
+ \end{enumerate}
+\section{Choices of Deflation Vectors}
+The deflation method is used to treat the most unfavorable eigenvalues
+of $M^{-1}A$, by taking into account only the favorable eigenvalues, 
+in such a way that the convergence is achieve faster. 
+The choice of the matrix $Z$ is of great importance for the deflation method, in the ideal case, it
+consist of the eigenvectors associated with the unfavorable eigenvalues. Sometimes, the computation of these
+eigenvectors can be very expensive and they can be inefficient in use. Therefore, is necessary
+to find deflation vectors that approximate the unfavorable eigenspace.\\
+There is no optimal choice for the deflation vectors because it depends on each problem and the available information.
+Most of the techniques to choose deflation vectors are based in the choices given in the next section.
+\subsection{Approximated Eigenvector Deflation}
+As the name states, this technique is based on approximate vectors, that can be obtained in different ways. For example,
+these eigenvalues can be derived from the solutions of the original PDE's on specific subdomains \cite{Vuik99}.
+
+\subsection{Recycling Deflation}
+With this technique, a set of vectors previously used is reused to build the deflation-subspace matrix \cite{Clemens04}. 
+The vectors could be, for example, the first $q-1$
+solution vectors of the linear system, and the matrix $Z$ will be:
+$$Z=[x^{(1)},x^{(12)},...,x^{(q-1)}].$$
+This method has the drawback that the matrix can be dense and can lead to implementation and memory difficulties. 
+
+\subsection{Subdomain Deflation}
+Here the domain is divided into several subdomains, where each subdomain corresponds to one or more deflation vectors.
+For each subdomain, there is a deflation vector that has ones for points in the subdomain and zeros for points outside\cite{Vuik02}.
+
+\subsection{Multi Grid and Multilevel Deflation}
+For the multigrid and multilevel methods, there are matrices called prolongation and restriction matrices, that
+allow us to pass from one level or grid to another. These matrices can also be used as the deflation-subspace matrix \cite{Smith96}.
+\chapter{Partial Differential Equations}
+A differential equation is called partial if its dependent variable varies with two or more independent variables,
+for example:
+\begin{equation*}
+ -\left( \frac{\partial^2 u}{\partial\mathbf{x}^2}+\frac{\partial^2 u}{\partial y^2}\right) =0.
+\end{equation*}
+Where $u$ is the dependent variable, and $x$, $y$ are the independent. The partial differential equations can be classified by
+their order: first order if they only have the first partial derivative, second order if they have the second partial, etc. They can also be
+classified as $linear$ or $nonlinear$. The equation is $linear$, if the coefficients are constant or function of the independent variables.
+$$u^m\left( \frac{\partial^n u}{\partial\mathbf{x}^n}\right)^r,\qquad \qquad m=0, \qquad r=1.$$
+\section{Types of Equations}
+The second order partial differential equations can be written in a general form as:
+\begin{equation*}
+ a_{11}\frac{\partial^2 u(x,y)}{\partial\mathbf{x}^2}+2a_{12}\frac{\partial^2 u(x,y)}{\partial x \partial y}+2a_{22}\frac{\partial^2 u(x,y)}{\partial y^2}
+ +b_1\frac{\partial u(x,y)}{\partial x}+b_2\frac{\partial u(x,y)}{\partial y}+cu(x,y)=f
+\end{equation*}
+This equation can be classified based in the sign of the determinant $D$,
+$$D= \left|\begin{array}{cc}
+a_{11} & a_{12}\\
+a_{12} & a_{22}
+\end{array}\right|=a_{11}a_{22}-a^2_{12}.$$
+\begin{itemize}
+ \item If $D=0$ the differential equation is parabolic.
+ \item If $D<0$ the differential equation is hyperbolic.
+ \item If $D>0$ the differential equation is elliptic.
+\end{itemize}
+The conditions that can be used to solve the partial differential equations can be of two types:
+\begin{itemize}
+\item {The Neumann} boundary condition: $\nabla u(\mathbf{x})\cdot n=f(\mathbf{x})$.
+\item {The Dirichlet} boundary conditions: $u(\mathbf{x})=g(\mathbf{x})$.
+\end{itemize}
+If the function $f(\mathbf{x})$ or $g(\mathbf{x})$ are zero, the boundary conditions are called homogeneous.
+\section{Finite Difference Discretization}
+The method of finite difference discretization is used to solve elliptic partial differential
+ equations ($D>0$). In this method, the domain $\Omega$ is discretized with a mesh of $N+1$, $(N+1)^2$ or $(N+1)^3$ nodes, for
+ $1D,2D$ and $3D$, respectively. The size of the mesh is $h=1/N$. The partial differential equation is transformed into 
+ a system of algebraic equations with the help of the Taylor series expansion. Some theory concerning the transformation is given in the next section.
+\subsection{Numerical Differentiation} 
+The derivative of a function $f(x)$ in a point $x_1$ is given by:
+\begin{equation*}
+ \frac{df(x)}{dx}=\lim_{\Delta x\rightarrow 0} \frac{f(x_1+\Delta x) -f(x_1)}{\Delta x}.
+\end{equation*}
+However, most of the functions are complicated and their exact derivatives cannot be determined easily.
+The Taylor's series are used to find an approximate derivative of this functions. The Taylor's series for a function $f(x)$ at a point $x_{i+1}$ is:
+\begin{equation}
+ f(x_{i+1})=f(x_i)+hf'(x_i)+\frac{h^2}{2!}f''(x_i)+\dots, \label{Taylor1}
+\end{equation}
+where $h$ is the distance between $x_i$ and $x_{i+1}$. The derivative of the function at $x_i$ can be obtained from \eqref{Taylor1} as:
+\begin{equation*}
+ f'(x_i)=\frac{f(x_{i+1})-f(x_i)}{h}-\frac{h}{2!}f''(x_i)+\dots,
+\end{equation*}
+which is called first forward divided differences. If we consider the error of order $h$ as $O(h)$,
+\begin{equation*}
+ f'(x_i)=\frac{f(x_{i+1})-f(x_i)}{h}+O(h). 
+\end{equation*}
+ In a similar way, using the Taylor's series for the point $x_{i-1}$, the first order derivative can be written as:
+ \begin{equation}
+ f(x_{i-1})=f(x_i)-hf'(x_i)+\frac{h^2}{2!}f''(x_i)+\dots \label{Taylor2}
+\end{equation}
+and 
+\begin{equation*}
+ f'(x_i)=\frac{f(x_{i-1})-f(x_i)}{h}+O(h). 
+\end{equation*}
+Which is the first backward divided differences with error $O(h)$.
+The central divided differences, which has an error of order $h^2$ is obtained by subtracting 
+\eqref{Taylor2} from \eqref{Taylor1} and is:
+\begin{equation}
+ f'(x_i)=\frac{f(x_{i+1})-f(x_{i-1})}{2h}+O(h^2). 
+\end{equation}
+High order derivatives of $f(x)$ can be derived in a similar way. The second order derivatives with central divided 
+differences have an error of order $h^2$ and is obtained as:
+\begin{equation}
+ f''(x_i)=\frac{f(x_{i+1})-2f(x_i)+f(x_{i-1})}{h^2}+O(h^2). \label{der2}
+\end{equation}
+This approximations are used for the discretization of the finite differences method, taking the central divided differences scheme, 
+where the point $x_i$ represents the $i$ point of the grid, and the $x_{i+1}$, $x_{i-1}$ points are grid points located a distance $h$ from the $i$ point.
+\subsection{Poisson's Equation}
+The Poisson's equation in $2D$ is given by:
+\begin{equation}
+ -\left(\frac{\partial^2 u(x,y)}{\partial x^2}+\frac{\partial^2 u(x,y)}{\partial y^2}\right)=f(x,y). \label{poiss}
+\end{equation}
+If the function $f(x,y)=0$ this equation is called Laplace's equation.
+In the previous section is mentioned that the second derivative of a function $u(x)$ can be written as \eqref{der2}. If the function
+depends on two independent variables, the partial derivative with respect to each variable can be approximated by:
+\begin{gather*}
+\frac{\partial^2 u(x,y)}{\partial x^2}\simeq \frac{u_{i+1,j}-2u_{i,j}+u_{i-1,j}}{h^2}\\
+ \frac{\partial^2 u(x,y)}{\partial y^2}\simeq \frac{u_{i,j+1}-2u_{i,j}+u_{i,j-1}}{h^2}
+\end{gather*}
+with $$u_{i,j}=u(x_i,y_j).$$
+If we substitute the second derivatives in the Poisson's equation \eqref{poiss} we get:
+\begin{equation*}
+-\frac{u_{i+1,j}+u_{i,j+1}-4u_{i,j}+u_{i-1,j}+u_{i,j-1}}{h^2}=f_{i,j}.
+\end{equation*}
+For the Dirichlet boundary, the values of $u$ are given, so it's only necessary to compute the solution for the interior nodes.
+If the interior nodes are $M=N-\Gamma$, where $\Gamma$ are the nodes in the boundary, we can 
+number these interior nodes
+from 1 to M, and transform this problem into a linear system of the form $Ax=b$, where
+\begin{equation*}
+A=
+\begin{pmatrix}
+4 & -1 & 0  & 0 &\dots &-1 &\dots  & 0 &0 &0\\
+-1 &4 & -1 & 0  &\dots & 0 &-1 & \dots  & 0 &0 \\
+\vdots\\
+0  &-1 &\dots &  -1 &4 & -1   &\dots &-1 & \dots  & 0 \\
+                    \vdots \\
+0 & 0  &\dots &-1 & 0  & \dots  &0 &-1 & 4 &-1\\
+0 & 0 & 0 &\dots &-1& 0  &\dots &0 &-1 & 4
+\end{pmatrix}, \qquad
+b=
+\begin{pmatrix}
+f_{1,1}\\
+f_{2,2}\\
+f_{3,3}\\
+\vdots\\
+f_{M-1,M-1}\\
+f_{M,M}
+\end{pmatrix}.
+\end{equation*}
+And the boundary conditions will be impose in the nodes that are related with the boundary nodes.
+For the Dirichlet's conditions we have:
+\begin{align*}
+&u(0,y)=\Gamma_{0,y}\\
+&u(L,y)=\Gamma_{L,y}\\
+&u(x,0)=\Gamma_{x,0}\\
+&u(x,L)=\Gamma_{x,L}.
+\end{align*}
+These conditions will change the side of the equation that contains $b$ for the interior nodes $(i,j)$ that have a boundary node as neighbor.
+For these terms, the boundary condition will be added to the function $f_{ij}$
+For the Neumann conditions ($\frac{\partial u}{\partial x_i}. n$):
+\begin{align*}
+\frac{\partial u}{\partial x}=\nu_{i,j}
+\end{align*}
+We need to approximate the normal derivative of the boundary points with the central difference scheme. For a point
+in the boundary $i,j$ and an interior point $i-1,j$ and an imaginary point $i+1,j$, we have:
+\begin{equation*}
+\frac{\partial u}{\partial x}\simeq\frac{u_{i+1,j}-u_{i-1,j}}{2h},\qquad O(h^2)
+\end{equation*}
+The temperature at the point $u_{i+1,j}=2h\frac{\partial u_{i,j}}{\partial x}+u_{i-1,j}=2h\nu_{i,j}+u_{i-1,j}$. 
+For the boundary point $i,j$ the approximate solution is:
+\begin{equation*}
+\frac{(2h\nu_{i,j}+u_{i-1,j})+u_{i,j+1}-4u_{i,j}+u_{i-1,j}+u_{i,j-1}}{h^2}=f_{i,j}.
+\end{equation*}
+That can be rewritten as:
+\begin{equation*}
+\frac{u_{i,j+1}-4u_{i,j}+2u_{i-1,j}+u_{i,j-1}}{h^2}=f_{i,j}-2\nu_{i,j}.
+\end{equation*}
+
+
+\chapter{Concepts in Reservoir Engineering}
+
+\section{Petroleum Reservoir}
+\hspace{0.5cm}
+Petroleum reservoirs are layers of sedimentary rock, which vary in terms of their grain size, mineral
+and clay contents. 
+These rocks contain grains and empty space, the void is called pore space.
+The pore space allows the rock to 
+store and transmit fluids. The volume fraction of the rock that is void is called $rock$
+$porosity$ ($\phi$).\\
+Some rocks are compressible and their porosity depends on the pressure, this dependence is called 
+$rock$ $compressibility$ ($c_r$). 
+The ability of the rock to transmit a single fluid when the void space is completely filled with fluid
+is known as $rock$ $permeability$ (${K}$). \\
+Reservoir simulation is a way to analyze and predict the fluid behavior in a reservoir
+by the analysis of its behavior in a model. The description of subsurface flow simulation involves two types of models: 
+mathematical and geological models. The geological model is used to describe the reservoir, i.e., the porous rock formation. 
+The mathematical modeling is performed taking into account mass conservation and Darcy's law,
+corresponding to the momentum conservation. The equations used to describe single-phase flow through a porous medium are:
+\begin{equation}\label{eq:ce}
+\frac{\partial (\rho \phi)}{\partial t}+ \nabla \cdot ( \rho {v})=q, \qquad v=-\frac{K}{\mu}(\nabla p-\rho g\nabla z),
+\end{equation}
+or
+\begin{equation}\label{eq:ce1}
+\frac{\partial (\rho \phi)}{\partial t}- \nabla \cdot \left( \frac{\rho{K}}{\mu}(\nabla {p}-\rho g\nabla z)\right)=q.
+\end{equation}
+Where the primary unknown is the pressure ${p},$ $g$ is the constant of gravity, $d$ is the reservoir depth,
+$\rho$ and $\mu$ are the fluid density and viscosity and $q$ are the sources. The fluid density $\rho=\rho(p)$ and the rock porosity $\phi=\phi(p)$ can be pressure dependent.
+Rock porosity is related to the pressure via the rock compressibility. The relation is given by the following expression:
+\begin{equation*}
+ c_r=\frac{1}{\phi}\frac{d\phi}{dp}=\frac{d(ln(\phi))}{dp},
+\end{equation*}
+If the rock compressibility is constant, the previous equation is integrated as:
+\begin{equation}\label{eq:por}
+ \phi(p)=\phi_0 e^{c_r(p-p_0)}.
+\end{equation}
+The fluid density and the pressure are related via the fluid compressibility $c_f$, the relation is given by:
+\begin{equation*}\label{eq:fc}
+ c_f=\frac{1}{\rho}\frac{d\rho}{dp}=\frac{d(ln(\rho))}{dp}.
+\end{equation*}
+If the fluid compressibility is constant, the previous equation is integrated as:
+\begin{equation}\label{eq:rhoeq}
+ \rho(p)=\rho_0 e^{c_f({p}-{p}_0)}.
+\end{equation}
+To solve Equation \eqref{eq:ce1}, it is necessary to supply conditions on the boundary of the domain. For parabolic equations, we also need to impose initial conditions. Boundary and initial conditions will be discussed later for each problem.   \\
+\textbf{Incompressible fluid}\\
+If the density and the porosity are not pressure-dependent in Equation \eqref{eq:ce1}, we have an incompressible model, where density and porosity do not change over time. Therefore, the incompressible mode is time-independent. Assuming no gravity terms and a fluid with constant viscosity, Equation \eqref{eq:ce1} becomes:
+\begin{equation}\label{eq:cel}
+-\frac{\mathbf{\rho}}{\mu}\nabla \cdot \left({K} \nabla p\right)=q.
+\end{equation}
+\emph{Discretization}\\
+The spatial derivatives are approximated using a finite difference scheme with cell central 
+differences. For a 3D model, taking a mesh with a uniform grid size $\Delta x$, $\Delta y$, $\Delta z$ where $(i,j,l)$ is the center 
+of the cell
+in the position $i$ in the $x$ direction and $j$ in the $y$ direction and $l$ in the $z$ direction
+($x_i,y_j,z_l$) and $p_{i,j,l}=p(x_i,y_j,z_l)$ is 
+the pressure at this point.
+\\ For the $x$ direction, we have (see \cite{Jansen13}):
+\begin{align*}
+&\frac{\partial}{\partial x}\left(k\frac{\partial p}{\partial x}\right) = 
+\frac{\Delta}{\Delta x}\left(k\frac{\Delta p}{\Delta x}\right) +\mathscr{O}(\Delta x^2)\\
+&=\frac{ k_{i+\frac{1}{2},j,l}(p_{i+1,j,l}-p_{i,j,l})-k_{i-\frac{1}{2},j,l}(p_{i,j,l}-p_{i-1,j,l})}{\left( \Delta x\right)^2}+\mathscr{O}(\Delta x^2),
+\end{align*}
+where $k_{i-\frac{1}{2},j,l}$ is the harmonic average of the permeability for cells 
+$(i-1,j,l)$ and $(i,j,l)$:
+\begin{equation}\label{eq:ha}
+ k_{i-\frac{1}{2},j,l}=\frac{2}{\frac{1}{ k_{i-1,j,l}}+\frac{1}{ k_{i,j,l}}}.
+\end{equation}
+After discretization, Equation \eqref{eq:cel}, together with boundary conditions, can be written as:
+ \begin{equation}\label{eq:cel1}
+\mathbf{T}\mathbf{p} = \mathbf{q},
+\end{equation}
+where $\mathbf{T}$ is known as the transmissibility matrix with elements in adjacent grid cells. The $transmissibility$ ($T_{i-\frac{1}{2},j,l}$) between grid cells $(i-1,j,l)$ and $(i,j,l)$ is defined as \cite{Cordazzo02}:
+\begin{equation}\label{eq:htrans}
+ T_{i-\frac{1}{2},j,l}=\frac{2\Delta y \Delta z}{\mu\Delta x}k_{i-\frac{1}{2},j,l},
+\end{equation} 
+System \eqref{eq:cel1} is a linear system that can be solved with iterative or direct methods. For the solution of this system, it is necessary to define boundary conditions in all boundaries of the domain. These conditions can be prescribed pressures 
+(Dirichlet conditions), flow rates (Neumann conditions) or a combination of these (Robin conditions).  \\\\
+\textbf{Compressible fluid}\\
+If the fluid is compressible with a constant compressibility, the density depends on the pressure (see Equation \eqref{eq:rhoeq}). Therefore, Equations \eqref{eq:ce} become:
+\begin{equation}\label{eq:ce2}
+\frac{\partial (\rho(p) \phi)}{\partial t}+ \nabla \cdot ( \rho(p) {v})=q, \qquad v=-\frac{K}{\mu}(\nabla p-\rho(p) g\nabla z),
+\end{equation}
+\emph{Discretization}\\
+Using backward Euler time discretization, Equations \eqref{eq:ce2} are approximated by:
+\begin{equation}\label{eq:ce3}
+ \frac{(\mathbf{\phi}\mathbf{\rho}(p))^{n+1}-(\mathbf{\phi}\mathbf{\rho}(p))^{n}}{\Delta t^n}
+ +\nabla \cdot (\mathbf{\rho}({p}) v)^{n+1}={q}^{n+1},
+\qquad
+{v}^{n+1}= -\frac{{K}}{\mu^{n+1}}(\nabla({p}^{n+1})-g\mathbf{\rho}^{n+1}\nabla{z}).
+\end{equation}
+Assuming no gravity terms, constant fluid viscosity and constant rock porosity, Equations \eqref{eq:ce3}
+become:
+\begin{equation}\label{eq:ce4}
+ \mathbf{\phi}\frac{\mathbf{\rho}({p}^{n+1})
+ -\mathbf{\rho}({p}^{n})}{\Delta t^n}
+ -\frac{1}{\mu}\nabla \cdot (\mathbf{\rho}({p}^{n+1}) 
+ {K}\nabla{p}^{n+1})+{q}^{n+1}=0.
+\end{equation}
+Due to the dependence of $\rho$ on the pressure, the latter is a nonlinear equation for $p$ that can be linearized with, e.g., the Newton-Raphson (NR) method.
+Equation \eqref{eq:ce4} can be discretized in space, using a finite differences scheme. After spatial discretization, Equation \eqref{eq:ce4} reads:
+\begin{equation}\label{eq:ce5}
+ {\phi}\frac{{\rho}(\mathbf{p}^{n+1})
+ -{\rho}(\mathbf{p}^{n})}{\Delta t^n}
+ -\frac{1}{\mu}\nabla \cdot ({\rho}(\mathbf{p}^{n+1}) 
+ \mathbf{K}\nabla\mathbf{p}^{n+1})+\mathbf{q}^{n+1}=0.
+\end{equation}
+As in the incompressible case, we need to define boundary condition to solve Equation \eqref{eq:ce5}. Dirichlet, Neumann or Robin boundary conditions can be used. For this problem, we also have a derivative with respect to time. Therefore, it is also necessary to specify the initial conditions that are the pressure values of the reservoir at the beginning of the simulation.\\\\
+\textbf{Well model}\\
+In reservoirs, wells are typically drilled to extract or inject fluids. Fluids are injected into a well at constant 
+surface rate or constant bottom-hole pressure (bhp) and are produced at constant bhp or a constant surface rate.\\
+ When the bhp is known, some models are developed to accurately compute the flow rate into the wells. 
+ A widely used model is Peaceman's model, that takes into account the bhp and the average grid pressure in the block containing the well. 
+This model is a linear relationship between the bhp and the surface flow rate in a well, for a cell $(i,j,l)$ that contains a well, this relationship is given by:
+\begin{equation}\label{eq:wellm}
+{q}_{(i,j,l)}={I}_{(i,j,l)}({p}_{(i,j,l)}-{p}_{bhp(i,j,l)}),
+\end{equation}
+where ${I}_{(i,j,l)}$ is the productivity or injectivity index of the well, ${p}_{(i,j,l)}$ is the reservoir pressure in the cell 
+where the well is located, 
+and ${p}_{bhp(i,j,l)}$ is a prescribed pressure inside the well. \\\\
+\emph{Incompressible fluid}\\
+Using the well model for an incompressible fluid, Equation \eqref{eq:cel1} transforms into:
+ \begin{equation}\label{eq:celw1}
+\mathbf{T}\mathbf{p} = \mathbf{I}_w(\mathbf{p}-\mathbf{p}_{bhp}).
+\end{equation}
+Where $\mathbf{I}_w$ is a vector containing the productivity or injetivity indices of the wells present in the reservoir. It is zero for cells without wells and the value of the well index for each cell containing a well.\\\\ 
+\emph{Compressible fluid}\\
+For a compressible fluid, using the well model, Equation \eqref{eq:ce5} reads:
+\begin{equation}\label{eq:cew4}
+ {\phi}\frac{{\rho}(\mathbf{p}^{n+1})
+ -{\rho}(\mathbf{p}^{n})}{\Delta t^n}
+ -\frac{1}{\mu}\nabla \cdot ({\rho}(\mathbf{p}^{n+1}) 
+ \mathbf{K}\nabla\mathbf{p}^{n+1})+\mathbf{I}_w^{n+1}(\mathbf{p}^{n+1}-\mathbf{p}_{bhp}^{n+1})=0.
+\end{equation}\\
+\textbf{Solution procedure for compressible flow}\\
+As mentioned before, for the compressible problem, we have a nonlinear system that depends on the pressure at the time step $n$ and the pressure at the time step $n+1$. Therefore, Equation \eqref{eq:cew4} can be seen as a function that depends on $\mathbf{p}^{n+1}$ and $\mathbf{p}^{n}$, i.e.,
+\begin{equation}\label{eq:NR}
+ \mathbf{F}(\mathbf{p}^{n+1};\mathbf{p}^n)=0.
+\end{equation}
+This nonlinear system can be solved with the NR method, the system for the $(k+1)$-th NR iteration is:
+$$\mathbf{J}(\mathbf{p}^k)\delta\mathbf{p}^{k+1}=-\mathbf{F}(\mathbf{p}^k;\mathbf{p}^n),
+\qquad \mathbf{p}^{k+1}=\mathbf{p}^k+\delta \mathbf{p}^{k+1},$$
+where $\mathbf{J}(\mathbf{p}^k)=\frac{\partial \mathbf{F}(\mathbf{p}^k;\mathbf{p}^n)}{\partial \mathbf{p}^k}$ is the 
+Jacobian matrix, and $\delta \mathbf{p}^{k+1}$ is the NR update at iteration step $k+1$.\\
+Therefore, the linear system to solve is:\\
+\begin{equation}\label{eq:lsJ}
+\mathbf{J}(\mathbf{p}^k)\delta \mathbf{p}^{k+1}=\mathbf{b}(\mathbf{p}^k).
+\end{equation}
+with $\mathbf{b}(\mathbf{p}^k)$ being the function evaluated at iteration step $k$, $\mathbf{b}(\mathbf{p}^k)=-\mathbf{F}(\mathbf{p}^k;\mathbf{p}^n)$.\\
+The procedure to solve a compressible flow problem consists of three stages. During the first stage, we select a 
+time and solve Equation \eqref{eq:cew4} for this particular time, i.e., we have a solution for each time step. In the second stage, 
+we linearize the equations with the NR method, i.e., we perform a series of iterations to find the 
+zeros of Equation \eqref{eq:NR}. For every NR iteration the linear system in Equation \eqref{eq:lsJ} is solved with direct or iterative methods. A summary of 
+this procedure is presented in Algorithm 1.
+
+\begin{table}[!h]\centering
+\begin{minipage}{.7\textwidth}
+\begin{tabular}{ |l| } 
+\hline
+\textbf{Algorithm 1}\\
+\hline
+\hline
+\hspace{0.5cm}\textbf{for} $t=0,...,$    \hspace{52mm}    \%Time integration \\
+\hspace{1cm} Select time step\\
+\hspace{1cm}\textbf{for} $NR\_iter=0,...,$    \hspace{34mm}    \%NR iteration\\
+ \hspace{1.5cm} Find zeros of $\mathbf{F}(\mathbf{p}^{n+1};\mathbf{p}^n)=0$\\
+\hspace{1.5cm}\textbf{for} $lin\_iter=0,...,$    \hspace{31mm}    \%Linear iteration \\
+\hspace{2cm}Solve $\mathbf{J}(\mathbf{p}^k)\delta \mathbf{p}^{k+1}=\mathbf{b}(\mathbf{p}^k)$ for each NR iteration\\
+\hspace{1.5cm}\textbf{end}\\
+\hspace{1cm}\textbf{end}\\
+\hspace{0.5cm}\textbf{end}\\
+\hline
+\end{tabular}
+\end{minipage}
+\end{table}
+
+\subsubsection{Mass Conservative formulation.}
+The reservoir simulation are usually run to predict the recoverable hydrocarbon volumes, 
+in such a case is necessary to represent accurately the mass conservation equation.
+The equation \eqref{ceq4} can be interpreted as the mass balance equation for a grid point $i$,
+if the rows are added, we get:
+\begin{equation}
+ \sum_{i=1}^{n_x} \sum_{j=1}^{n_y}[Vc_t(\phi_0)_{i,j}\dot{p_{i,j}}+q_{i,j}],
+\end{equation}
+which can be interpreted as the mass-balance equation for the system. Therefore any mass-balance
+error in the numerical solution results from errors in the accumulation terms 
+$Vc_t(\phi_0)_{i,j}\dot{p_{i,j}}.$
+The discretization of the accumulation term can be done in the form:
+\begin{equation}
+ Vc_t(\phi_0)\frac{\partial p}{\partial t}=Vc_t(\phi_0)\frac{p_{k+1}-p_{k}}{\Delta t}.
+\end{equation}
+But this discretization, in general, is not mass conservative. For mass conservative discretization
+it is necessary to take the original accumulation term:
+\begin{equation*}
+ \frac{\partial(\rho \phi)}{\partial t}=\frac{1}{\Delta t}\left[
+ \frac{1}{\phi}\frac{\partial \phi}{\partial p}+\frac{1}{\rho}\frac{\partial\rho }{\partial p}
+\right]\frac{\partial p}{\partial t},
+ \end{equation*}
+'Comparison with equation (1.38) shows that the constant coefficient Vct0 has been replaced
+by a state-dependent coefficient, which, moreover, contains an element k+1 that should be
+computed at the new time step k+1. A mass-conservative implementation therefore always
+requires some form of implicit time integration. For liquid flow, and as long as the pressure
+changes in the reservoir remain small compared to the total pressure, the effect of mass-
+balance errors is small, and therefore we do not make use of the strict mass-conserving
+formulation in our numerical examples. However if compressibility plays a role, e.g. when
+free gas is present, the use of a mass-conservative formulation is essential.'
+
+\subsection{Two-phase fluids.}
+When simulating two-phases within a porous medium, we often consider them as separated phases, i.e.,
+they are inmiscible and there is no mass transfer between the phases. 
+The contact between phases is known as the interface between two reservoir fluids phases.\\ 
+While modeling two phases we 
+usually consider one of the fluids as the wetting phase ($w$) that wets the porous medium more than the other.
+The other phase is consider as non-wetting phase ($o$). In the case of a water-oil system, water is often 
+the wetting phase. \\
+For a reservoir, the density of each phase varies, the gas is less dense than the oil and water. 
+Therefore, the gas is found on top of the reservoir. For the oil-water system, water's density is larger 
+than oil's, then water is found on the bottom of the reservoir.\\
+The saturation of a phase $S_{\alpha},$ is the fraction of void space filled with that phase in a porous 
+medium.
+If there are two phases present in the porous medium, these fluids fill completely the empty space, which is
+expressed by the following relation.
+\begin{equation}\label{eq:satrel}
+ S_o+S_w=1
+\end{equation}
+
+The surface tension and the curvature of the interface between the fluids causes a difference in pressure
+between the two phases. 
+The pressure in the wetting fluid is less than in the nonwetting fluid. 
+This difference in pressures is known as the capillary pressure, $p_c$, and it's function of saturation:
+\begin{equation}\label{eq:cappress}
+ p_c(S_w)=p_o-p_w.
+\end{equation}
+
+% If we have an oil reservoir  with volume $V$ and porosity $\phi$ the oil volume
+% in reservoir (OIP-oil in place) is given by:
+% $$OIP=V\phi (1-S_{wc})$$
+% Where $S_{wc}$ is the irreducible water saturation, the water present in the oil and gas zones of the
+% reservoir, also known as connate water. 
+% If the oil is generated in deep rock, when it moves to an upper 
+% zone filled with water, it cannot displace all the water. This water remain as connate water, normally 
+% between 10 and 15 \%.
+As in the single-phase case, the governing equations for two-phase flow in a porous medium are the mass 
+conservation and Darcy's law. 
+The mass balance equations for each phase are given by:
+\begin{equation*}
+ \nabla \cdot (\alpha \rho_w \mathbf{v}_w)+\alpha \frac{\partial(\rho_w \phi S_w)}{\partial t}-\alpha \rho_w q_w=0,
+\end{equation*}
+\begin{equation*}
+ \nabla \cdot (\alpha \rho_o \mathbf{v}_o)+\alpha \frac{\partial(\rho_o \phi S_o)}{\partial t}-\alpha \rho_o q_o=0.
+\end{equation*}
+Darcy's law is:
+\begin{equation*}
+\mathbf{v}_w=-\frac{k_{rw}}{\mu_w} \mathbf{K}(\nabla p_w-\rho_w g \nabla d),
+\end{equation*}
+\begin{equation*}
+\mathbf{v}_o=-\frac{k_{ro}}{\mu_o} \mathbf{K}(\nabla p_o-\rho_o g \nabla d),
+\end{equation*}
+where $k_{rw}$, $k_{ro}$ are the relative permeabilities.
+Combining mass balance equation and Darcy's law we get:
+\begin{equation*}
+ \nabla \cdot \left( -\frac{\alpha \rho_wk_{rw}}{\mu_w} \mathbf{K}(\nabla p_w-\rho_w g \nabla d)\right)+\alpha \frac{\partial(\rho_w \phi S_w)}{\partial t}-\alpha \rho_w q_w=0,
+\end{equation*}
+\begin{equation*}
+ \nabla \cdot \left( -\frac{\alpha \rho_ok_{ro}}{\mu_o} \mathbf{K}(\nabla p_o-\rho_o g \nabla d)\right)+\alpha \frac{\partial(\rho_o \phi S_o)}{\partial t}-\alpha \rho_o q_o=0.
+\end{equation*}
+Substituting \eqref{eq:satrel} and \eqref{eq:cappress} in previous equations we get:
+
+\begin{equation*}
+ -\nabla \cdot \left\{ \frac{\alpha \rho_wk_{rw}}{\mu_w} \mathbf{K}\left[ \left( \nabla p_o-\frac{\partial p_c}{\partial S_w}\nabla S_w\right)-\rho_w g \nabla d\right]\right\} 
+ +\alpha\rho_w\phi\left[S_w(c_w+c_r) \frac{\partial p_o}{\partial t}+\frac{\partial S_w}{\partial t}\right]
+ -\alpha \rho_w q_w=0,
+\end{equation*}
+\begin{equation*}
+- \nabla \cdot \left[\frac{\alpha \rho_ok_{ro}}{\mu_o} \mathbf{K}(\nabla p_o-\rho_o g \nabla d)\right]+\alpha \rho_o\phi \left[(1-S_w)(c_o+c_r)\frac{\partial p_o}{\partial t}-\frac{\partial S_w}{\partial t}\right]-\alpha \rho_o q_o=0.
+\end{equation*}
+In absence of capillary pressure ($p_o=p_w$) and dispersion, these equations become:
+\begin{equation*}
+ -\nabla \cdot \left[ \frac{\alpha \rho_wk_{rw}}{\mu_w} \mathbf{K} \left( \nabla p-\rho_w g \nabla d\right)\right]
+ +\alpha\rho_w\phi\left[S_w(c_w+c_r) \frac{\partial p}{\partial t}+\frac{\partial S_w}{\partial t}\right]
+ -\alpha \rho_w q_w=0,
+\end{equation*}
+\begin{equation*}
+- \nabla \cdot \left[\frac{\alpha \rho_ok_{ro}}{\mu_o} \mathbf{K}(\nabla p-\rho_o g \nabla d)\right]+\alpha \rho_o\phi \left[(1-S_w)(c_o+c_r)\frac{\partial p}{\partial t}-\frac{\partial S_w}{\partial t}\right]-\alpha \rho_o q_o=0.
+\end{equation*}
+
+
+\chapter{Proper Orthogonal Decomposition (POD)}
+\subsection*{Model Order Reduction.}
+The Model Order Reduction (MOR) methods are based in a projection - framework. Where, the original 
+high-order system is transformed into a much lower order one, 
+preserving the most important part of the system dynamics \cite{Mark06,Astrid11}.\\ 
+The dynamical system can be written as \cite{Mark06}:
+\begin{equation}\label{eq1}
+\mathbf{E}\sigma \mathbf{x}(t) = \mathbf{f}(\mathbf{x}, \mathbf{u}),
+\end{equation}
+where $\sigma$ can be the continuous derivative operator $\sigma \mathbf{x}(t)=d\mathbf{x}(t)/dt,$ 
+$t \in \mathcal{R}$,
+or the shift $\sigma \mathbf{x}(t)=x(t+1)$, $t \in \mathbb{Z}$ if the system is discretized in time. 
+The vector $\mathbf{x}$ is an n-dimensional state of the system, for reservoir 
+simulation is the grid-block pressures and saturations vector. The vector $\mathbf{u}$ is a p-dimensional 
+vector-valued input signal, and $\mathbf{E}$ is the descriptor matrix, that contains the physical parameters.
+For reservoir simulation, $E$ is the accumulation matrix. \\
+Equation \eqref{eq1} can be written as:
+\begin{equation}\label{eq2}
+\sigma \mathbf{x}(t) =\mathbf{E}^{-1} \mathbf{f}(\mathbf{x},\mathbf{u})=\tilde{\mathbf{f}}(\mathbf{x},\mathbf{u}).
+\end{equation} 
+The projection-based model reduction models try to find $l$ dimensional ($l<<n$) subspaces $S_1$ and $S_2$ of 
+the state space that will yield a reduced system as result of projection of the state onto $S_1$, and the residual onto $S_2$.
+For matrices $V$ and $W$ of size $n \times l$ spanning $S_1$ and $S_2$, respectively, 
+the reduced order models is:
+\begin{equation}\label{eq3}
+\mathbf{W}^T \mathbf{E}\sigma [\mathbf{V} \mathbf{z}(t)]=\mathbf{W}^T \mathbf{f}(\mathbf{V} \mathbf{z}(t),\mathbf{u}),
+\end{equation} 
+where $W$ and $V$ are chosen to minimize the error in the state-solution 
+approximation $\mathbf{x} \cong \mathbf{V}\mathbf{z}$ or the residual of the system equation: 
+\begin{equation}
+\epsilon (t) := \mathbf{E}\sigma [\mathbf{V}\mathbf{z(t)}]-f(\mathbf{V}\mathbf{z}(t),\mathbf{u}).
+\end{equation}
+When the subspaces $S_1$ and $S_2$ are equal, the projection is called orthogonal, otherwise it is oblique.\\
+In the MOR, the high order model is projected onto the space
+spanned by a set of orthonormal basis functions. The high dimensional variable $\mathbf{x} \in \mathbb{R}^n$
+is approximated by a linear combination for $l<<n$ orthonormal basis functions \cite{Astrid11}:
+\begin{equation}\label{eq4}
+  \mathbf{x}\approx \sum_{i=1}^lz_i \mathbf{\phi}_i,
+\end{equation}
+where $\phi_i \in \mathbf{R}^n$ are the basis functions and $z_i$ are its corresponding coefficients.
+In matrix notation equation \eqref{eq4} is:
+$$\mathbf{x}\approx \Phi\mathbf{z},$$
+where $\Phi=[\phi_1 \text{ }\phi_2 \text{ }.. \text{ }\phi_l]$, $\Phi \in \mathbf{R}^{n\times l}$ are the basis matrix 
+of the basis functions, and $\mathbf{z} \in \mathbf{R}^l$ is the vector of basis functions coefficients. 
+ROM can be applied to speed-up the solution of a linear system,
+\begin{equation}\label{eq5}
+ A\mathbf{x}=\mathbf{b}.
+\end{equation}
+This linear system is projected onto the subspace spanned by the basis $\Phi$:
+$$\Phi^TA\Phi \mathbf{z}=\Phi^T\mathbf{b},$$
+and the system is rewritten as:
+$$A_r\mathbf{z}=b_r.$$
+The original sparse matrix $A \in \mathbf{R}^{n\times n}$ is transformed into a much smaller matrix,
+$A_r \in \mathbf{R}^{l\times l}.$ \\
+Although the reduced-order matrix is dense, it is sufficiently small to solve it efficiently using direct 
+inversion methods.
+The solution $z$ of the reduced order model, is used
+to compute an approximated solution of equation \eqref{eq5} ($\mathbf{x} \approx \Phi \mathbf{z}$).\\
+
+\subsection*{Proper Orthogonal Decomposition (POD).}
+The Proper Orthogonal Decomposition method is also known with several names, some of them are:
+'Principal components analysis', 'Karhunen-Loeve expansion', and the 'Method of empirical functions'. \\
+This method has been used in several applications, one of these is the modeling or the analysis of flow through 
+porous media \cite{Gharbi97,Heijn03,Vermeulen04}.\\
+The Proper Orthogonal Decomposition (POD) 
+method is a ROM where the basis functions are based on 'snapshots'
+which are expected to be 'sufficiently accurate' for the success of the method. This 'snapshots'
+$\{ \mathbf{x_i}\} _{i\in \mathbb{N}}$ are obtained
+by simulation or experiment and a matrix $n\times m$ is created with this vectors \cite{Mark06}.
+\begin{equation}
+X:=[\mathbf{x}_1,\mathbf{x}_2,...\mathbf{x}_m].
+\end{equation}
+It is possible to determine, a set of $l,$ $l\leq m << n,$ orthogonal vectors, denoted by $\{ \mathbf{\phi} _j \} ^l _{j=1},$ 
+with POD. \\These orthonormal
+eigenvectors are the largest eigenvalues $\{ \mathbf{\lambda} _j \} ^l _{j=1}$ of 
+the data snapshot correlation matrix,
+
+\begin{equation}
+\mathbf{R}:= \frac{1}{m}\mathbf{X}\mathbf{X}^T \equiv \frac{1}{m} \sum_{i=1}^m \mathbf{x}_i \mathbf{x}_i^T.
+\end{equation}
+Sometimes, instead of $\mathbf{R}$, the covariance matrix used is:
+\begin{equation}
+\overline{\mathbf{R}}:=\frac{1}{m} \sum_{i=1}^m (\mathbf{x}_i-\overline{\mathbf{x}}) (\mathbf{x}_i-\overline{\mathbf{x}})^T,
+\end{equation}
+where $\overline{\mathbf{x}}=\sum_{i=1}^m \mathbf{x}_i$, is the mean of the snapshots.\\
+This vectors satisfy that the distance between the snapshots
+and its projections on the subspace defined by 
+$\Phi=[\mathbf{\phi}_1 , \mathbf{\phi}_2,.... \mathbf{\phi}_l] \in \mathcal{R}^{n \times l}$, 
+is minimized for any $l$,
+\begin{equation}
+Q:=\frac{1}{m} \sum_{i=1}^m ||\mathbf{x}_i- \Phi \Phi ^T \mathbf{x}_i ||^2.
+\end{equation}
+The number of dominant eigenvectors $l$ is chosen to be the largest number satisfying:
+\begin{equation}
+\frac{\sum_{j=1}^l\lambda_j}{\sum_{j=1}^m\lambda_j}\leq \alpha, \qquad 0<\alpha \leq 1.
+\end{equation}
+The standard POD approach involves approximating the solution $ \mathbf{x}$ by the linear combination,
+\begin{equation}
+\mathbf{x}\simeq \Phi \mathbf{z}.
+\end{equation}
+The resulting $l$-dimensional reduced order model of \eqref{eq3} becomes: 
+\begin{equation} \label{rod}
+\mathbf{\Phi}^T \mathbf{E}\Phi \frac{d}{dt} \mathbf{z}(t)=\mathbf{\Phi}^T \mathbf{f}(\mathbf{\Phi} \mathbf{z}(t),\mathbf{u}(t)).
+\end{equation} 
+The vectors $\phi_j$ and the matrix $\Phi$ are in general dense, 
+therefore $\mathbf{\Phi}^T \mathbf{E}\Phi$ and $\mathbf{\Phi}^T \mathbf{f}$ are dense as well, i.e. the possible sparse pattern is lost. 
+Then a gain in the simulation speed is possible only if the reduced order is much smaller than the original one.\\
+
+\subsection*{Applications of POD for reservoir simulation.}
+\subsubsection{Improving initial guess.}
+In \cite{Mark06}, reduced order models are used to accelerate the solution of 
+systems of equations using iterative solvers in time stepping schemes for large scale numerical solutions. 
+The solution is accelerated by improving the initial guess for the iterative process based on solutions obtained
+in the previous time steps. \\
+The algorithm consist of two projection steps:\\
+1) Projecting the governing equations onto a subspace spanned by a low number of global empirical basis 
+functions extracted from the previous time step solutions.\\
+2) Solving the governing equations in the reduced space and projecting the solution back to the original one.
+This algorithm is used for simulation of two-phase flow through heterogeneous porous media. It is modeled with the 
+IMPES implicit pressure explicit saturation scheme and the iterative solution of the pressure 
+equation is investigated. 
+The largest problem had 93500
+variables and the maximum reduction in computed time was of 67\%. 
+The iterative solvers used where preconditioned conjugate gradient (PCG), minimal residual (MinRes) and 
+successive overrelaxation (SOR) methods.
+
+\subsubsection{Preconditioning.}
+Astrid \cite{Astrid11} used the Proper Orthogonal Decomposition to speed up the pressure solution 
+during a two stage 
+preconditioning procedure in a fully implicit integration scheme. The method is also applicable to IMPES, 
+IMPEC (implicit pressure explicit accumulation), and AIM (adaptive implicit methods). 
+The reservoir model is a three dimensional, two-phase model, developed by van Essen \cite{vanEssen09}.
+The spatial domain consists of 25200 grid blocks, 18553 grid cells active, 8 injection wells and 4 production
+wells, viscosities and fluid compresibilities are equal for both phases. Rock compressibility is negligible, 
+permeabilities are isotropic and no capillary forces were taken into account. 
+Snapshots are collected by simulating the reservoir while turning on and off the wells one by one. 
+Well control settings may change during the full simulation, so the POD basis functions should at 
+least contain the solutions obtained by flowing each of the wells separately or in at least 
+as many linear combinations of well control settings. \\
+
+In a MsC thesis \cite{Jiang13}, it is developed and investigated a linear-solver preconditioner for the pressure systems 
+in reservoir simulation based on Proper Orthogonal Decomposition.
+The goal of this work is to investigate the POD method as preconditioner for the linear system of the pressure equation.
+The POD based approximation used in this work is:
+$$\tilde{x}=M^{-1}_{POD}b,$$ where
+\begin{equation}
+ M^{-1}_{POD}=\Phi(\Phi^TA\Phi)^{-1}\Phi^T \qquad \text{Galerkin as default}
+\end{equation}
+\begin{equation}
+ M^{-1}_{POD,LS}=\Phi(\Phi^TA^TA\Phi)^{-1}\Phi^TA^T \qquad \text{LSP}
+\end{equation}
+For the POD method, $(\Phi^TA\Phi)^{-1}$ and $(\Phi^TA^TA\Phi)^{-1}$ are of much smaller 
+dimension than $A$.
+The rank of the preconditioning operator $M^{-1}$ is less than or equal to $l$.\\
+A 10x10 homogeneous oil/water reservoir model using the IMPES scheme was used to study the performance of
+the POD pressure preconditioner. The POD preconditioner was used with ILU and it was found that it was
+faster for larger values of $l$, compared with ILU-only preconditioner. In rhis work they also observed a possible dependence
+of the RHS using this preconditioner.
+\appendix
+\chapter{MRST \cite{Lie13}.}
+\section*{Grid construction.}
+The MRST (MATLAB Reservoir Simulation Toolbox) allows the use of various grid types, which are stored using a general unstructured
+format, in which cells, faces, vertices's and connections between cells and faces are explicitly
+represented. \\
+There is a wide range of structured and unstructured grids that can be constructed in MRST.
+For the structured grids, a pattern is chosen and repeated. The most typical structured grids are 
+based on quadrilaterals in 2D and hexahedral 3D.
+
+\subsubsection{Cartesian grids.}
+The simplest structured grid is based in a square in 2D and a cube in 3D. to construct these
+grids in the MRST we need to specify the domain $[0\: Lx,\: 0\: Ly]$ represented as $[Lx\: Ly]$, and
+number of cells $nx, ny$, for cartesian grids the construction is in the next form:\\
+$$
+G\:=\:cartGrid([nx,ny],[Lx,Ly]) \qquad 2D, $$
+$$G\:=\:cartGrid([nx,ny],[Lx,Ly,Lz]) \qquad 3D.
+$$
+If we want to build a 3D cartesian grid with 10 cells in each direction in a cube with 
+$ [0\: 10]\times [0\: 10]\times[0\: 1]$, we use the next function:\\\\
+\begin{tabular}{|c|}
+\hline
+$$
+G\:=\:cartGrid([10 \:10\: 10],[1\: 1\: 10]); $$\\
+$$plotGrid(G);   \qquad \text{to plot the grid}$$\\
+\hline
+\end{tabular}
+
+
+\subsubsection{Rectilinear grids.}
+These are also called tensor grids, are rectilinear shapes (rectangles or parallelepipeds) not necessarily 
+congruent to each other.\\
+An example is a rectilinear grid in the domain $[-1,1]\times[0,1]$, with an increase of size.
+
+\begin{tabular}{|l|}
+\hline
+ $$dx=1-0.5*cos((-1:0.1:1)*pi);$$ \\
+ $$x=-1.15+0.1*cumsum(dx);$$\\
+ $$y=0:0.05:1;$$\\
+ $$G=tensorGrid(x,sqrt(y));$$\\
+ $$plotGrid(G);$$\\
+ $$axis([-1.05 1.05 -0.05 1.05])$$\\
+\hline
+\end{tabular}
+\begin{figure}[h!]
+\centering
+\begin{minipage}{.6\textwidth}
+ \centering
+\includegraphics[width=6cm,height=6cm,keepaspectratio]{/home/wagm/cortes/Desktop/work/writing/pics/cartGrid3d.jpg}
+\caption{Cartesian grid in 3D.}
+\label{fig:Cartgrid3D}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+\centering
+\includegraphics[width=6cm,height=6cm,keepaspectratio]{/home/wagm/cortes/Desktop/work/writing/pics/rectGrid2d.jpg}
+\caption{Rectangular grid in 2D.}
+\label{fig:Rectgrid2D}
+\end{minipage}
+\end{figure}
+
+\subsubsection{Rock modeling in MRST.}
+The rock parameters are represented as fields in a structure. All the solvers in MRST work with 
+this assumption. The name of the structure is $\textbf{rock}$, and the fields for porosity and permeability are $\mathbf{poro}$ 
+($\mathbf{rock.poro}$) and $\mathbf{perm}$, ($\mathbf{rock.perm}$). In the MRST software, the permeability
+can be a vector for isotropic permeability or a symmetric tensor.\\
+If we want to model an homogeneous 10x10 grid with uniform porosity of 0.2 and isotropic permeability of 200 mD, 
+we just fill the corresponding fields with these values.\\ MRST works in SI units, so we need to convert from 'Darcy' to
+'$meters^2$', this can be done by multiplication of the functions $\mathbf{milli}$ and $\mathbf{darcy}$, that 
+return the corresponding conversion factors. There is another conversion function $convertFrom(200,milli*darcy)$.
+\\\\
+\begin{tabular}{|l|}
+\hline
+ $$G=cartGrid([10 10]);$$\\
+ $$rock.poro=repmat(0.2,[G.cells.num,1]);$$\\
+ $$rock.perm=repmat(200*milli*darcy,[G.cells.num,1]);$$\\
+\hline
+\end{tabular}
+\\\\For an homogeneous, anisotropic permeability, the field is constructed in a similar way.\\\\
+\begin{tabular}{|l|}
+\hline
+ $$rock.perm=repmat([100 100 10]*milli*darcy,[G.cells.num,1]);$$\\
+\hline 
+\end{tabular}
+\\\\It is not easy to measure the rock properties, so it is common to use geostatistical methods for the porosity and
+permeability fields. MRST contains two methods for generating geostatistical realizations.
+The first one has porosity $\phi$ as a Gaussian field (Figure \ref{fig:Gaussf2D}), and the second one is with
+layered realizations (Figure \ref{fig:layperm3D}).
+\\In the software, there are also some models, with pre-defined structure, permeability and porosity,
+that can be used. Some of these models are:
+\begin{enumerate}
+ \item $10^{th}$ SPE. 
+ \item The Johansen formation.
+ \item SAIGUP model.
+ \item Etc.
+\end{enumerate}
+\begin{figure}[ht]
+\centering
+\begin{minipage}{.6\textwidth}
+\includegraphics[width=6cm,height=6cm,keepaspectratio]{/home/wagm/cortes/Desktop/work/writing/pics/gaussianf2d.jpg}
+\caption{Gaussian field in 2D.}
+\label{fig:Gaussf2D}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+\centering
+\includegraphics[width=6cm,height=6cm,keepaspectratio]{/home/wagm/cortes/Desktop/work/writing/pics/layerspor3d.jpg}
+\caption{Layered permeability in 3D.}
+\label{fig:layperm3D}
+\end{minipage}
+\end{figure}
+\subsubsection{Fluid properties.}
+For the basic single-phase flow equation, the fluid properties needed are the viscosity and the fluid
+density for incompressible models, and fluid compressibility for compressible models.
+MRST uses fluid objects that contain basic fluid properties and some function handles used to
+evaluate rock-fluid properties for multiphase flow.
+If we want to determine the viscosity and density of a fluid, we need to write the values with units in the
+fluid object.\\\\
+\begin{tabular}{|l|}
+\hline
+$$fluid=initSingleFluid('mu',1*centi*poise,'rho',1014*kilogram/meter\^ {}3).$$\\
+\hline
+\end{tabular}
+\\\\After initialization, the fluid object will contain pointers to functions that can
+be used to evaluate petrophysical properties of the fluid:\\\\
+\begin{tabular}{|l|}
+\hline
+fluid =\\
+properties:@(varargin)properties(opt,varargin{:})\\
+saturation:@(x,varargin)x.s\\
+relperm:@(s,varargin)relperm(s,opt,varargin{:})\\
+\hline\end{tabular}
+\\\\The first function returns the viscosity when called with a single output argument 
+and the viscosity and the
+density when called with two output arguments. For single-phase flow this is the only 
+relevant function. 
+\\For the saturation function, the argument is the reservoir state and returns
+the corresponding saturation. The relperm function accepts a
+fluid saturation as argument and returns the relative permeability, i.e., the
+reduction in permeability due to the presence of other fluid phases. For single-phase 
+flow is identical to one.
+
+\subsubsection{Reservoir States.}
+MRST uses a structure for the dynamic state of the reservoir, it is called state object.
+This structure contains 3 elements: a pressure and a saturation vector,
+with the pressure and saturation of each cell in the model. And a vector flux, with one 
+flux per grid face in the model.
+The state object is initialized by a call to the function:\\\\
+\begin{tabular}{|l|}
+\hline
+ $state=initResSol(G,p_0,s_0),$\\
+\hline
+\end{tabular}
+\\\\where $p_0$ is the initial pressure, and $s_0$ is the initial saturation, 
+which is 1 for single-phase models.
+If the reservoir has wells, the state object should contain an additional field wellSol, 
+that is a vector with
+the size of the number of wells. Each element of the previous vector is a structure with two 
+fields $wellSol.pressure$ and $wellSol.flux$. 
+\\\\
+\begin{tabular}{|l|}
+\hline
+ $state=initResSol(G,W,p_0,s_0).$\\
+\hline
+\end{tabular}
+
+\subsubsection{Wells.}
+The wells describe injection or extraction of fluids from the reservoir. They provide volumetric
+flux rate and a model that couples the flux rate to the difference between the average in the grid cell
+and the pressure inside the wellbore. The structure used to represent wells is W, and consist of 
+the following fields:
+\begin{enumerate}
+\item cells: an array index to cells perforated by this well.
+\item type: string describing which variable is controlled, either ’bhp’ (default, the well is controlled by bottom-hole pressure), or ’rate’ (the well is rate controlled).
+\item val: the target value of the well control (Pascal for ’bhp’ or [$m^3$/sec]’rate’). Default value is 0.
+\item rate r: the wellbore radius (default 0.1 m).
+\item dir: a char describing the direction of the perforation, one of the cardinal
+directions ’x’, ’y’ or ’z’.
+\item WI: the well index: either the productivity index or the well injectivity index
+depending on whether the well is producing or injecting.
+\item name: string giving the name of the well.
+\item compi: fluid composition, only used for injectors.
+\item refDepth: reference depth of control mode.
+\item sign: define if the well is intended to be producer or injector.
+\end{enumerate}
+The well structures are created with the function:\\\\
+\begin{tabular}{|l|}
+\hline
+ $W=addWell(W,G,rock,CellInx, 'pn', pv,...$.\\
+\hline
+\end{tabular}
+\\\\Here, $cellInx$ is a vector of the indices's to the cells perforated by the well and 'pn' indicate more 
+parameters that can influence the well. 
+There is also the function:\\\\
+\begin{tabular}{|l|}
+\hline
+ $W=verticalWell(W,G,rock,I,J,K)$,\\
+\hline
+\end{tabular}
+\\\\that can be used to specify vertical wells in models described by Cartesian
+grids. I,J gives the horizontal location of the well.
+\subsubsection{Sources.}
+The flow into or out the interior points of the reservoir can be also added using the following function:\\\\
+\begin{tabular}{|l|}
+\hline
+ $src=addSource(scr,cells,rates);$\\
+ $src=addSource(scr,cells,rates,'sat',sat).$\\
+\hline
+\end{tabular}
+\\\\$Src$ is a structure that contains the following fields:
+\begin{enumerate}
+ \item $cell:$ cells for which explicit sources are provided,
+ \item $rate:$ rates for these explicit sources,
+ \item $value:$ pressure or flux value for the given condition,
+ \item $sat:$ specifies the composition of injected fluids in cell. 
+\end{enumerate}
+\subsubsection{Boundary conditions.}
+For specifying Dirichlet or Neumann conditions, the functions used are the following:\\\\
+\begin{tabular}{|l|}
+\hline
+ $$src=addBC(bc,faces,type,values);$$\\
+ $$src=addBC(bc,faces,type,values'sat',sat),$$\\
+\hline 
+\end{tabular}
+\\\\The input values are:
+$bc:$ structure that contains the following fields:
+\begin{enumerate}
+ \item $face:$ external faces for which explicit conditions are set,
+ \item $type:$ cell array of strings denoting type of condition,
+ \item $value:$ pressure or flux value for the given condition,
+ \item $sat:$ fluid composition.
+\end{enumerate}
+\subsubsection{Incompressible two-point pressure solver.}
+The two-point flux-approximation scheme is used in MRST, the half-face transmissibility of
+eq. \eqref{htrans} is computed with:\\\\
+\begin{tabular}{|l|}
+\hline
+ $ht=computeTrans(G,rock).$\\
+\hline
+\end{tabular}
+\\\\And the solution is obtained with:
+\\\\
+\begin{tabular}{|l|}
+\hline
+ $state=imcompTPFA(state,G,ht,fluid,'mech1,obj1,...),$\\
+\hline
+\end{tabular}
+\\\\that takes the complete model, with mech the drive mechanism ('src','bc', and or 'wells').
+The inflow and outflow must sum up to zero for preventing the violation of the assumption of incompressibility.
+
+
+
+
+\bibliographystyle{unsrt}
+\bibliography{research}
+
+\end{document}

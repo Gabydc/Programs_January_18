@@ -1,0 +1,137 @@
+\documentclass{TUD_NA_PhD_thesis}
+
+\title{POD-based deflation method for reservoir simulation}
+
+\usepackage{lipsum}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+%\usepackage{natbib}
+\usepackage{graphicx} % figuras
+%\usepackage[export]{adjustbox} % loads also graphicx
+\usepackage{float}
+\usepackage[font=footnotesize]{caption}
+\usepackage{wrapfig}
+\usepackage{authblk}
+\usepackage{subfigure}
+\usepackage{setspace}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{footnote}
+
+
+\begin{document}
+
+\frontmatter
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Samenvatting}
+
+\chapter{Summary}
+
+
+\mainmatter
+
+\chapter{Introduction}
+\section{Reservoir simulation}
+Petroleum reservoirs are layers of sedimentary rock, which vary in terms of grain size, mineral and clay contents. 
+Reservoir simulation is a way to analyze and predict the fluid behavior inside a reservoir through the analysis of a model, which can be a geological or a mathematical model. \par 
+The geological model describes the reservoir, i.e., the rock formation. For this description, a set of petrophysical properties are defined. The main properties are: the \emph{rock porosity}, $\phi$, defined as the fraction of void space inside the rock and the \emph{rock permeability}, $\mathbf{K}$, that determines the rock's ability to transmit a fluid through the reservoir. The rock permeability in general is a tensor where each entry $\mathbf{K}_{ij}$ represents the flow rate in one direction ($i$) caused by the pressure drop in the same ($i$) or in a perpendicular ($j$) direction. \par
+For the mathematical modeling, we describe the flow through porous media making use of the principle of mass conservation and Darcy's law, corresponding to the momentum conservation.
+The mass balance equation for a fluid phase $\alpha$ is given by:
+\begin{equation}\label{eq:mc}
+ \frac{\partial(\phi \rho_{\alpha}S_{\alpha})}{\partial t}+\nabla \cdot ( \rho_{\alpha} \mathbf{v}_{\alpha})=\rho_{\alpha} q_{\alpha},
+\end{equation}
+and the Darcy's law reads:
+\begin{equation}\label{eq:D}
+\mathbf{v}_{\alpha}=-\frac{\mathbf{K}_{\alpha}}{\mu_{\alpha}} (\nabla p_{\alpha}-\rho_{\alpha} g \nabla d),
+\end{equation}
+where, $\rho_{\alpha}$, $\mu_{\alpha}$ and $p_{\alpha}$ are the density, viscosity,  and pressure of the fluid;  $g$ is the gravity constant, $d$ is the depth of the reservoir and $q_{\alpha}$ are sources, usually, fluids injected into the reservoir. 
+The saturation of a phase $(S_{\alpha}),$ is the fraction of void space filled with that phase in the medium, where a zero saturation indicates that the phase is not present.
+Fluids inside a reservoir are usually filling completely the empty space, this property is expressed by the following relation:
+\begin{equation}\label{eq:sr}
+ \sum_{\alpha}S_{\alpha}=1.
+\end{equation}\par
+If our system consists in more than one fluid phase, the permeability of each fluid phase, $\alpha$, will be affected by the presence of the other phase. Therefore, the effective permeability $\mathbf{K}_\alpha$ has to be used instead of the absolute permeability $\mathbf{K}$.  The absolute and effective permeabilities are related via the saturation-dependent relative permeability:
+$$\mathbf{K}_{\alpha}=k_{r\alpha}(S_{\alpha})\mathbf{K}.$$
+
+
+
+
+
+\par
+The fluid density $\rho_{\alpha}=\rho_{\alpha}(p)$ and the rock porosity $\phi=\phi(p)$ can be pressure dependent. The dependence is given by the \emph{rock compressibility}, $c_r$, 
+\begin{equation}\label{eq:rc}
+ c_r=\frac{1}{\phi}\frac{d\phi}{dp}=\frac{d(ln(\phi))}{dp},
+\end{equation}
+ for the porosity, and the \emph{fluid compressibility}, $c_f$,
+\begin{equation}\label{eq:fc}
+ c_f=\frac{1}{\rho_{\alpha}}\frac{d\rho_{\alpha}}{dp}=\frac{d(ln(\rho_{\alpha}))}{dp},
+\end{equation}
+for the density.
+
+
+\subsection{Single-phase flow}
+\subsection{Two-phase flow}
+
+%\chapter{Thesis Overview}
+
+
+
+
+\chapter{Numerical methods}
+\chapter{Single-phase flow}
+\chapter{Two-phase flow}
+
+\backmatter
+\setcounter{chapter}{0}
+
+\chapter{Conclusions}
+
+
+\appendix
+\chapter{Appendix 1}\label{a1}
+\section*{List of notation}
+\begin{table}[!h]
+\centering
+\begin{tabular}{c l l }
+\hline
+Symbol & Quantity & Unit \\[0.5ex]
+\hline
+$\phi$ & Rock porosity&   \\
+$\alpha$ & Fluid phase& \\
+$\mathbf{K}$& Rock permeability&  $Darcy$ $(D)$ \\ 
+$\mathbf{K}_{\alpha}$& Effective permeability  &  $Darcy$ $(D)$ \\
+$\mathbf{k}_{r\alpha}$& Relative permeability  &  \\
+$\mu_{\alpha}$&Fluid viscosity & $Pa \cdot s$   \\
+$S_{\alpha}$  &Saturation &  \\
+$\rho_{\alpha}$ &Fluid density &  $kg/m^3$ \\
+ $\mathbf{v}_{\alpha}$ & Darcy's velocity& $ m/d$ \\
+ $q_{\alpha}$ &Sources &   \\
+  $c_r$& Rock compressibility&  $Pa^{-1}$ \\
+$c_f$ &Fluid compressibility &  $Pa^{-1}$ \\
+$g$  &Gravity &  $m/s^2$ \\
+$d$ & Reservoir depth& \\
+
+
+
+
+ $\lambda_{\alpha}$&Fluid mobilities& $D/ (Pa \cdot s)$   \\
+${p}$  &Pressure &  $Pa$ \\
+$p_{c}$  &Capillary pressure &  $Pa$ \\
+
+
+\hline
+\end{tabular}\label{table:symbols}
+\caption{Notation}
+\end{table}
+
+\chapter{My 2 Appendix}
+\chapter{My 3 Appendix}
+\printbibliography
+
+\end{document}
