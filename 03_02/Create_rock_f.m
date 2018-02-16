@@ -27,7 +27,7 @@ else
     G = computeGeometry(cartGrid(cartDims, physDims));
     
     % Set up uniform permeability and constant porosity
-    rock.perm = ones(G.cells.num, 1)*1;
+    rock.perm = ones(G.cells.num, 1)*10;
     rock.poro = ones(G.cells.num, 1)*0.2;
     
     % Create layers of permeability
@@ -49,7 +49,7 @@ else
         end
     end
 
-    rock.perm(I) = 1*10^(per);
+    rock.perm(I) = 10*10^(-per);
     
     rock.perm = convertFrom(rock.perm, milli*darcy);
     is_pos             = rock.poro > 0;

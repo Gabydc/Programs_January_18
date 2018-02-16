@@ -8,7 +8,7 @@ nstep =  80;
 %% Define Solver
 use_ICCG   = true;
 use_DICCG  = false;
-training   = true;
+training   = false;
 use_agmg   = false;
 use_POD    = true;
 plot_sol   = true; 

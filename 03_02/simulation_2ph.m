@@ -13,7 +13,8 @@ p0 = x.pressure;
             %   W(5).val = I_P(k);
         end
     end
-    
+                 
+        
     
     %   W(5).val = PI_1;
     if(use_DICCG)
@@ -35,7 +36,14 @@ p0 = x.pressure;
                 [x,preport(k)]= psolve(x);
                 dt_p(k) = toc(t0);
                 POD_V(:,k) = x.pressure;
-            else  
+                
+            else
+%                 % Number of POD vectors
+%                 if use_POD
+%                     dpod   = [k-dp : k-1];
+%                 else
+%                     dpod   = [k-dv : k-1];
+%                 end
                 [U,S]=PODbasis(POD_V(:,k-dv:k-1));
                 Z = U(:,dpod);
                 if(use_wells)

@@ -140,7 +140,8 @@ if(residu(i) < tol)
    disp(['True residual is, r_1 = ||b-A*xk||_2: ' num2str(tresidu(i))])
    end
 end
-residu(i)
+
+
 while  (i < maxit) && (residu(i) > tol)
    
  %   if(Convergence{1}) & (residu(i) < Error)

@@ -36,11 +36,13 @@ x=sparse(x);
 %size(x)
 U=x*V*S';
 U = U(:,1:ly);
-
-% for i=1:ly
-%     U(:,i)=U(:,i)/norm(U(:,i)); 
-% end
-rank(full(U))
+S = diag(S);
+for i=1:ly
+    U(:,i)=U(:,i)/norm(U(:,i)); 
+end
+ru = rank(full(U))
+U1 = U(:,8:10);
+rank(full(U1))
 % figure
 % plot(log((diag(S))),'*r');
 % nf =nf+1;

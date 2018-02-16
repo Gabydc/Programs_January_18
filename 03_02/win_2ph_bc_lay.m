@@ -5,8 +5,7 @@
 clear, close all hidden
 
 %VarsSPE10_t
-per =1;
-Varslayers_t
+VarsSPE
 
 if(use_wells)
     Prod = struct('t'  , []                  , ...
@@ -24,11 +23,13 @@ if(use_wells)
     
     wres = cell([1, 4]);
 end
-% if (~training)
-%     filep=['I_P'];
-%     filename=[dir1 filep];
-% load(filename)
-% end
+if (use_DICCG) && (~window)
+        filep=['Pressure'];
+        filename=[dir1 filep];
+        load(filename)
+        [U,S]=PODbasis(Pressure);
+        Z = U(:,dpod);
+end
 
 
 
@@ -36,74 +37,91 @@ end
 
 
 for k = 1 : nstep,
+    
     p0 = x.pressure;
     if(use_wells)
         for i=1:numel(W)
             p0(N+i) = 0;
         end
+        if(training)
+            W = W1{k};
+            %  W(5).val = I_P(k);
+        else
+            W = W0{k};
+            %   W(5).val = I_P(k);
+        end
     end
+    
+    
+    %   W(5).val = PI_1;
     if(use_DICCG)
         use_DICCG
-       if k < dv+1
-           if(use_wells)
-               if training
-                   W = W1{k};
-                   %  W(5).val = I_P(k);
-               else
-                   W = W0{k};
-                   %   W(5).val = I_P(k);
-               end
-               %   W(5).val = PI_1;
-               solver = ICCGSolverAD('tolerance', tol,'maxIterations',  maxIter,'x0',p0,'W', W);
-               linsolve_p = @(A, b) solver.solveLinearSystem(A, b);
-               psolve = @(x) incompTPFA_Def(x, G, T, fluid, 'wells', W,'LinSolve', linsolve_p);
-           else
-               solver = ICCGSolverAD('tolerance', tol,'maxIterations',  maxIter,'x0',p0,'bc', bc);
-               linsolve_p = @(A, b) solver.solveLinearSystem(A, b);
-               psolve = @(x) incompTPFA_Def(x, G, T, fluid, 'bc',bc,'LinSolve', linsolve_p);
-               
-           end
-           t0 = tic;
-           [x,preport(k)]= psolve(x);
-           dt_p(k) = toc(t0);
-           POD_V(:,k) = x.pressure;
-       else
-           
-        
-
-            np = dv;
-            dpod = [np-dv+1:np];
-            [U,S]=PODbasis(POD_V(:,k-dv:k-1));
-            Z = U(:,dpod);
+        if (window)
+            if k < dv+1
+                use_ICCG
+                if(use_wells)
+                    solver = ICCGSolverAD('tolerance', tol,'maxIterations',  maxIter,'x0',p0,'W', W);
+                    linsolve_p = @(A, b) solver.solveLinearSystem(A, b);
+                    psolve = @(x) incompTPFA_Def(x, G, T, fluid, 'wells', W,'LinSolve', linsolve_p);
+                else
+                    solver = ICCGSolverAD('tolerance', tol,'maxIterations',  maxIter,'x0',p0,'bc', bc);
+                    linsolve_p = @(A, b) solver.solveLinearSystem(A, b);
+                    psolve = @(x) incompTPFA_Def(x, G, T, fluid, 'bc',bc,'LinSolve', linsolve_p);
+                    
+                end
+                t0 = tic;
+                [x,preport(k)]= psolve(x);
+                dt_p(k) = toc(t0);
+                POD_V(:,k) = x.pressure;
+            else  
+                [U,S]=PODbasis(POD_V(:,k-dv:k-1));
+                Z = U(:,dpod);
+                if(use_wells)
+                    for i=1:numel(W)
+                        Z(N+i,1)=0;
+                    end
+                    
+                end
+                if(use_wells)
+                    W = W0{k};
+                    %  W(5).val = I_P(k);
+                    solver = DICCGSolverAD('tolerance', tol,'maxIterations',  maxIter,'Z',Z,'x0',p0,'W', W);
+                    linsolve_p = @(A, b) solver.solveLinearSystem(A, b);
+                    psolve = @(x) incompTPFA_Def(x, G, T, fluid, 'wells', W,'LinSolve', linsolve_p, 'dir', dir2);
+                else
+                    solver = DICCGSolverAD('tolerance', tol,'maxIterations',  maxIter,'Z',Z,'x0',p0,'bc', bc);
+                    linsolve_p = @(A, b) solver.solveLinearSystem(A, b);
+                    psolve = @(x) incompTPFA_Def(x, G, T, fluid, 'bc', bc,'LinSolve', linsolve_p);
+                end
+            end
+        else
             if(use_wells)
+                W = W0{k};
                 for i=1:numel(W)
                     Z(N+i,1)=0;
                 end
-
+                %  W(5).val = I_P(k);
+                solver = DICCGSolverAD('tolerance', tol,'maxIterations',  maxIter,'Z',Z,'x0',p0,'W', W);
+                linsolve_p = @(A, b) solver.solveLinearSystem(A, b);
+                psolve = @(x) incompTPFA_Def(x, G, T, fluid, 'wells', W,'LinSolve', linsolve_p);
+            else
+                solver = DICCGSolverAD('tolerance', tol,'maxIterations',  maxIter,'Z',Z,'x0',p0,'bc', bc);
+                linsolve_p = @(A, b) solver.solveLinearSystem(A, b);
+                psolve = @(x) incompTPFA_Def(x, G, T, fluid, 'bc', bc,'LinSolve', linsolve_p);
             end
-       
-
-        if(use_wells)
-            W = W0{k};
-            %  W(5).val = I_P(k);
-            solver = DICCGSolverAD('tolerance', tol,'maxIterations',  maxIter,'Z',Z,'x0',p0,'W', W);
-            linsolve_p = @(A, b) solver.solveLinearSystem(A, b);
-            psolve = @(x) incompTPFA_Def(x, G, T, fluid, 'wells', W,'LinSolve', linsolve_p);
-        else
-            solver = DICCGSolverAD('tolerance', tol,'maxIterations',  maxIter,'Z',Z,'x0',p0,'bc', bc);
-            linsolve_p = @(A, b) solver.solveLinearSystem(A, b);
-            psolve = @(x) incompTPFA_Def(x, G, T, fluid, 'bc', bc,'LinSolve', linsolve_p);
         end
         t0 = tic;
         [x,preport(k)]= psolve(x);
         dt_p(k) = toc(t0);
-        POD_V(:,k) = x.pressure;
         
-       end
-       
+        if(window)
+            POD_V(:,k) = x.pressure;
+        end
+        
+        
     else if(use_ICCG)
             use_ICCG
-                
+            
             if(use_wells)
                 if training
                     W = W1{k};
@@ -184,7 +202,14 @@ if save_res
         ttits_t = sum(its);
         save([dir1  'ttits_t.mat'],'ttits_t')
         if(use_wells)
-        save([dir1  'I_P.mat'],'I_P')
+            save([dir1  'I_P.mat'],'I_P')
+        end
+        filetx = ['results.txt'];
+        
+        if(use_DICCG)
+            saveits_w(dir1,filetx,use_ICCG,use_DICCG,use_POD,dpod,k,dv,preport,last)
+        else
+            saveits(dir1,filetx,use_ICCG,use_DICCG,use_POD,dpod,k,dv,preport,last)
         end
     else
         %         for i=1:k
@@ -193,7 +218,11 @@ if save_res
         %         ttits = sum(its);
         %         save([dir1  'ttits.mat'],'ttits')
         filetx = ['results.txt'];
-        saveits(dir1,filetx,use_ICCG,use_DICCG,use_POD,dpod,k,dv,preport,last)
+        % Save only DICCG iterations
+        %saveits(dir1,filetx,use_ICCG,use_DICCG,use_POD,dpod,k,dv,preport,last)
+        %Save ICCG and DICCG
+        saveits_w(dir1,filetx,use_ICCG,use_DICCG,use_POD,dpod,k,dv,preport,last)
+        
     end
     filews=['workspace'];
     filename=[dir2 filews];
@@ -208,5 +237,5 @@ if save_res
 end
 %%
 if plot_sol
-    Plot_t
+    Plot_t1
 end

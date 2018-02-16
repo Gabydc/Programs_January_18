@@ -174,7 +174,7 @@ while  (i < maxit) && (residu(i) > tol)
             % If the residual increases, the approximation will be the previous
             % solution
             flagr = 1;
-            rmin = residu(i-1)
+            rmin = residu(i-1);
                     plot(i,residu(i),'*')
                         hold on
             if (residu(i) < rmin)
@@ -191,7 +191,7 @@ while  (i < maxit) && (residu(i) > tol)
                 x =  xacc;
                 break
             end
-            pause
+           % pause
         end
     end
     
@@ -207,7 +207,7 @@ while  (i < maxit) && (residu(i) > tol)
     z = M2 \ r;
     p = z + beta * p;
     residu(i) = norm(r);
-    ronmr= norm(r) 
+    ronmr= norm(r) ;
     pause
     normbax=norm(b-A*x)/norm(b);
     if(x_true{1} )

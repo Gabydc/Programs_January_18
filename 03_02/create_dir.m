@@ -3,8 +3,8 @@
 %dir = '/home/wagm/cortes/Localdisk/Research/Report/01_12/';
 %dir = '/run/media/taurlin/HP v165w/February/Results/';
 %%dir = '../2017_CM/Results1/';
-%dir = '/dev/media/Sphinx/Doctorado_Delft/Results/';
-dir = '/mnt/sda2/cortes/Research/2018/02_2018/Results/';
+dir = '/mnt/sda2/cortes/Research/articles/JCP_18/Results/';
+%dir = '/mnt/sda2/cortes/Research/2018/02_2018/Results/';
 if(use_wells)
     if(model_SPE)
         folder=[ 'SPE10_' num2str(numel(layers))  'DT_' num2str(DT/day), ...

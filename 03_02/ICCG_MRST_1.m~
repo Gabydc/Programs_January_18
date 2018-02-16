@@ -134,59 +134,17 @@ if(x_true{1} )
     tresidu(i) = norm(b-A*x);
 end
 
-tol =tol*norm(Mb)
+tol =tol*norm(Mb);
 if(residu(i) < tol) 
    disp(['DICCG only needs one iteration, initial residual is, r_1 = ||P*M^{-1}(b-A*xk)||_2' num2str(residu(i))])
    if(x_true{1})
    disp(['True residual is, r_1 = ||b-A*xk||_2: ' num2str(tresidu(i))])
    end
 end
+clf
 while  (i < maxit) && (residu(i) > tol)
 
-    if(Convergence{1}) 
-        Error
-        norm(Mb)
-        E = Error*norm(Mb)
-        ri_1 = residu(i)
-        abs(E)
-        dri = abs(ri_1 -E) 
-         
-        if (abs(ri_1) < abs(E))
-        % If the residual increases, the approximation will be the previous
-        % solution
-        xacc = x;
-        % If the residual increases, the approximation will be the previous
-        % solution
-        flagr = 1
-       
-        rmin = residu(i-1);
-         ri_1 = residu(i)
-        E
-         
-        plot(i,residu(i),'*')
-            hold on
-        drii_1 = abs(rmin -residu(i)) 
-        i
-       
-        if (residu(i) < rmin)
-            rmin = residu(i)
-            flagr = 1
-        else if (abs(rmin -residu(i)) > 1e-7 )
-                
-                rmin = residu(i-1)
-                flagr = 0
-            end
-           
-            
-        end
-        
-        if flagr == 0
-            warning(['Maximum accuracy is : ' num2str(residu(i))])
-            break
-        end
-        
-        end
-    end
+
     
     i = i+1;
     w = A * p;
