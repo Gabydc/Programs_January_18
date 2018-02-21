@@ -1,0 +1,12 @@
+function comparevars(A,B,titl)
+figure 
+subplot(2,2,1)
+mesh(A)
+title('A')
+subplot(2,2,2)
+mesh(B)
+title('A')
+subplot(2,2,[3 4])
+mesh(abs(A-B))
+title('abs(A-B)')
+title(titl)
