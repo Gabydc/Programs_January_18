@@ -1,0 +1,13 @@
+%... The MatMol Group (2016)
+     function xt = stiff_odes(t,x)
+%...
+%... Set global variables
+     global a b
+%...      
+%... Temporal derivatives
+%...
+     xt(1)  = -a*x(1) + b*x(2);
+     xt(2)  =  b*x(1) - a*x(2);
+%...
+%... Transfer temporal derivatives
+     xt=[xt(1) xt(2)]';

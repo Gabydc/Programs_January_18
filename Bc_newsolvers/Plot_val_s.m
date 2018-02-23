@@ -29,7 +29,7 @@ colors = {'r',  [0 0.7 0], 'b', 'm', [0 0.7 0.7], [0.7 0 0.7], [0.5 0.5 0.7]};
 
     %%
 opt = struct('optp',  {{ [1 2 3 4 5 6 7], [1 2], 5, [1 2 3 4], [1.8] }}, ...
-    'figure',      0, ...
+    'figure',      1, ...
     'savename', [], ...
     'W',  [], ...
     'titl',   [], ...
@@ -55,6 +55,7 @@ x            = opt.x;
 o_legend     = opt.o_legend;
 dir          = opt.dir;
 ly = size(y,1);
+
 figure(nf);
 clf
 file = [savename];
@@ -104,5 +105,6 @@ else if o_ax == 2
 end
 
 if (~isempty(dir))
+    saving =1
         savefigures(gcf, file, dir)
 end

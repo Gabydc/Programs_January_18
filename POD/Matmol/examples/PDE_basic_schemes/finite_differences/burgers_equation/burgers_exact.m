@@ -1,0 +1,9 @@
+%... The MatMol Group (2016)
+     function [x] = burgers_exact(z,t)
+%...
+%... this function computes an exact solution to Burgers' equation
+%...
+     global mu
+%...
+      ex=exp((z-0.5*t)/(2*mu));
+      x=1./(1+ex);

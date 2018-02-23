@@ -1,0 +1,6 @@
+%... The MatMol Group (2016)
+     function SL = S(c,T)
+%...
+     global gam
+%...     
+     SL = 2*(c.^2).*exp(gam*(1-1./T));

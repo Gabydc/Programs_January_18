@@ -1,0 +1,8 @@
+\begin{table}[!ht]\centering
+\begin{minipage}{1\textwidth}
+ \centering
+\begin{tabular}{ ||c|c||c|c|c|c|c||} 
+\hline
+$\frac{\sigma_2}{\sigma_1}$&Total&Method  & ICCG&DICCG &Total&\% of total\\ 
+                           & ICCG     &  & Snapshots& &ICCG& ICCG\\ 
+                                    &    &  & & &+ DICCG& \\ 

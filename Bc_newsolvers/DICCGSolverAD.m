@@ -97,7 +97,7 @@ along with MRST.  If not, see <http://www.gnu.org/licenses/>.
 %             % Compute true solution
 %             x_true     = opts{1}(3);
 %             % Checks the convergence of the method, in the case of DICCG the residual
-%             % can increas, in that case, the solution will be the solution with
+%             % can increase, in that case, the solution will be the solution with
 %             % minimal residual
 %             Convergence = opts{1}(4);
 %             % Save the variables to plot residual
@@ -113,7 +113,7 @@ along with MRST.  If not, see <http://www.gnu.org/licenses/>.
 %             % Compute eigenvalues and condition number of matrix E
 %             E_cn = opts{1}(10);
 
-            opts = {{true, false, false, true, false, true, false, false, false,false}};
+            opts = {{true, false, true, true, true, true, false, false, false,false}};
             
             [result,flag,res,its,resvec,resulte]  = DICCG_MRST(A,b,solver.Z,...
                 solver.tolerance,min(solver.maxIterations,nel),L,L',solver.x0, ...

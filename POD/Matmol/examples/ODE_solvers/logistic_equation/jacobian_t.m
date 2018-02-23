@@ -1,0 +1,9 @@
+%... The MatMol Group (2016)
+     function [Ft] = jacobian_t(t,N)
+%...
+%... Set global variables
+     global a b K N0
+%...
+%... logistic equation is an time invariant system
+%...  
+     Ft = 0;

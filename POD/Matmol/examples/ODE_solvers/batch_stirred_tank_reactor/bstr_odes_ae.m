@@ -1,0 +1,23 @@
+%... The MatMol Group (2016)
+    function xt = bstr_odes_ae(t,x)
+%...
+%... Set global variables
+     global A0 B0 rhocp Cd Cr Ed Er DH R
+%...
+%... Transfer dependent variables  
+     A = x(1);
+     T = x(2);
+%...      
+%... Algebraic equations
+%...
+     B = A0+B0-A;
+     kd = Cd*exp(-Ed/(R*T));
+     kr = Cr*exp(-Er/(R*T));
+%...      
+%... Temporal derivatives
+%...
+     At  = - kd*A + kr*B;
+     Tt  = + (kd*A - kr*B)*DH/(rhocp);
+%...
+%... Transfer temporal derivatives
+     xt=[At Tt]';

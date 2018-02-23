@@ -107,7 +107,7 @@ along with MRST.  If not, see <http://www.gnu.org/licenses/>.
             %  Amatrix_eigs = opts{7};
             %  % Compute eigenvalues of matrix M^{-1}A
             %  MAmatrix_eigs = opts{8};
-            opts = {{true, false, false, false, false, true, false, false}};
+            opts = {{true, false, true, false, true, true, false, false}};
             [result,flag,res,its,resvec,resulte]  = ICCG_MRST(A,b,...
                 solver.tolerance,min(solver.maxIterations,nel),L,L',solver.x0, ...
             'opts',opts);

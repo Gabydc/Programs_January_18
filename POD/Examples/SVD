@@ -1,0 +1,17 @@
+%% Compute SVD
+close all
+matrix
+[U,S,V] = svd(Z);
+
+
+for k = 1:3
+    ZZ = U(:,1:k) * S(1:k,1:k) * V(:,1:k);
+    figure
+%subplot(3,2,1)
+surf(X,T,ZZ)
+axis([0,1,0,2,0.4,2.1])
+xlabel('x'), ylabel('y'), zlabel('z'), title(['Rank' num2str(k) 'approximation'])
+end
+
+    
+    

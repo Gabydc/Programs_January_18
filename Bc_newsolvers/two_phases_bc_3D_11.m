@@ -11,14 +11,14 @@ for cp = [0 ]
     % The contrast between permeability layers can be varied one layer has
     % permeability of 10*milli*darcy, the secon is varied as
     % 10*10^(-per)*milli*darcy
-    for per=[6]
+    for per=[1]
         
         % In this part the solver is chosen 0 means ICCG (no deflation) and
         % 1 is with deflation
-        for def=[1 ]
+        for def=[0 1 ]
      
             % If we want to use POD as deflation vectors pod=1
-            for pod = [0]
+            for pod = [0 1]
                 clearvars -except per def pod cp
                 use_Cp =0;
                 
@@ -206,8 +206,8 @@ for cp = [0 ]
                     ts=0;
                     podi=0;
                     % while t < T,
-                    dT = 20*day;
-                    nstep = 11;
+                    dT = 10*day;
+                    nstep = 100;
                     for i=1:nstep;
                         i
                         close all

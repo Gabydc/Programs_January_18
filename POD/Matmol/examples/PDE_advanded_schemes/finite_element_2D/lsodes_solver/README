@@ -1,0 +1,6 @@
+Lsodes codes will depend on the OS platform and the matlab version.
+In this folder Lsodes has been compiled for:
+- Linux 64 bits and Matlab version > 7.9  (Lsodes.mexa64)
+- Linux 32 bits and Matlab version > 7.9  (Lsodes.mexglx)
+- Windows 32 bits and Matlab version 7.6  (Lsodes.dll)
+

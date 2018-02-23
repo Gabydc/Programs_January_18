@@ -15,10 +15,10 @@ for cp = [0 ]
         
         % In this part the solver is chosen 0 means ICCG (no deflation) and
         % 1 is with deflation
-        for def=[0 ]
+        for def=[0 1]
             
             % If we want to use POD as deflation vectors pod=1
-            for pod = [0]
+            for pod = [0 1]
                 clearvars -except per def pod cp
                 use_Cp =0;
                 
@@ -209,7 +209,7 @@ for cp = [0 ]
                     ts=0;
                     podi=0;
                     % while t < T,
-                    for i=1:1;
+                    for i=1:100;
                         close all
                         ts=ts+1;
                         if t==0
@@ -229,8 +229,7 @@ for cp = [0 ]
                             psolverop_1
                             fn = @(A, b) solver.solveLinearSystem(A, b);
                             psolve = @(state) incompTPFA_Def(state, G, hT, fluid, 'bc', bc ,'MatrixOutput',true,'LinSolve', fn);
-                            
-                            
+
                             [rSol,preport(ts)]    = psolve(rSol);
                             
                         else
@@ -331,7 +330,8 @@ for cp = [0 ]
                         legend('ICCG','DICCG');
                         axis square
                     else
-                        hn=plot((dT:dT:T)/day,its(1:ts),'r*');
+%                        hn=plot((dT:dT:T)/day,its(1:ts),'r*');
+                        hn=plot(its(1:ts),'r*');
                         legend('ICCG');
                         axis square
                     end
