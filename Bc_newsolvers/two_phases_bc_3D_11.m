@@ -15,10 +15,10 @@ for cp = [0 ]
         
         % In this part the solver is chosen 0 means ICCG (no deflation) and
         % 1 is with deflation
-        for def=[0 1 ]
+        for def=[0  ]
      
             % If we want to use POD as deflation vectors pod=1
-            for pod = [0 1]
+            for pod = [0 ]
                 clearvars -except per def pod cp
                 use_Cp =0;
                 
@@ -41,9 +41,9 @@ for cp = [0 ]
                     % Initialize the variables, size, fluid values, time
                     % step, ...
                     varsbc
-                    tol = 8;
+                    tol = 7;
                     tol_p     = 5.0*10^(-tol);
-                    tol_t   = 5.0e-7;
+                    tol_t   = 5.0*10^(-tol);
                     maxIter = 1000;
                     
                     
@@ -57,7 +57,7 @@ for cp = [0 ]
                     
                     
                     %Create the directory
-                    dir='/mnt/sda2/cortes/Results/2018/02/20/';
+                    dir='/mnt/sda2/cortes/Results/2018/02/26/';
                     
                     folder=[ '10-' num2str(tol) '_' num2str(sz) 'nz' num2str(nz) 'perm_' num2str(per) 'cp' num2str(cp)];
                     mkdir([dir], folder)
@@ -206,8 +206,8 @@ for cp = [0 ]
                     ts=0;
                     podi=0;
                     % while t < T,
-                    dT = 10*day;
-                    nstep = 100;
+                   % dT = 10*day;
+                   % nstep = 100;
                     for i=1:nstep;
                         i
                         close all

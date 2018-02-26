@@ -9,7 +9,7 @@ lp = length(dpod);
 text = [dir1 file];
 
 for i=1:ts
-    its(i,1)=preport(1,i).iter;
+    iter(i,1)=preport(1,i).iter;
 end
 
 if ~exist(text, 'file')
@@ -27,7 +27,7 @@ end
 
 if (use_ICCG)
     fileID = fopen(text,'a');
-    ttits = sum(its);
+    ttits = sum(iter);
     save([dir1  'ttits.mat'],'ttits')
     fprintf(fileID,['$10^{' num2str(per) '} $&' num2str(dv) '&' num2str(ttits) '&' num2str(ttits) '& 0 ' '&' num2str(ttits)  '&' num2str(1) '\\\\ \n']);
     
@@ -40,9 +40,9 @@ else if (use_DICCG)
             fprintf(fileID,'\\noalign{\\smallskip}\\hline\\noalign{\\smallskip}\n');
             fclose(fileID);
         end
-        icits=sum(its(1:dv));
-        dicits=sum(its(dv+1:ts));
-        tits = sum(its);
+        icits=sum(iter(1:dv));
+        dicits=sum(iter(dv+1:ts));
+        tits = sum(iter);
         load([dir1   'ttits.mat'],'ttits')
         perc=round(mean(tits*100/ttits));
         if (use_POD)
@@ -56,6 +56,9 @@ else if (use_DICCG)
             fileID = fopen(text,'a');
             fprintf(fileID,'\\hline  \n');
             fprintf(fileID,['$10^{' num2str(per) '} $&' num2str(numel(dpod)) '&' num2str(ttits)  '&' num2str(icits) '&' num2str(dicits) '&' num2str(tits)  '&' num2str(perc) '\\\\ \n']);
+            fprintf(fileID,'\\hline\\noalign{\\smallskip} \n');
+            fprintf(fileID,'\\end{tabular} \n');
+            fprintf(fileID,'\\end{table}  \n');
             fclose(fileID);
             
             

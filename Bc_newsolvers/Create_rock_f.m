@@ -33,6 +33,7 @@ else
     rock.poro = ones(G.cells.num, 1)*0.2;
     
     % Create layers of permeability    
+    if per > 0
     nlay = nx/szl;
     v = [];
     for i = nlay+1:2*nlay:ny
@@ -52,9 +53,11 @@ else
     end
 
     rock.perm(I) = 10*10^(-per);
+    end
     pv = poreVolume(G, rock);
     
-    rock.perm = convertFrom(rock.perm, milli*darcy);
+    
 %     is_pos             = rock.poro > 0;
 %     rock.poro(~is_pos) = min(rock.poro(is_pos));
 end
+rock.perm = convertFrom(rock.perm, milli*darcy);

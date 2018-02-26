@@ -28,7 +28,7 @@ Lx=sz;
 Ly=sz;
 gravity on
 % We define the maximum of iterations for the liner solver
-maxIterations=500;
+maxIterations=1000;
 % We define the tolerance of the linear solver
 % k=8;
 % tol = 5*10^(-k);
@@ -53,11 +53,11 @@ dv=10;
 podv{1}=[1:10];
 podv{2}=[6:10];
    %% Transport loop vars
-    T      = 4800*day();
+    T      = 1200*day();
     %T      = 100*day();
-    nstep = 1;
+    nstep = 240;
     dT     = T/nstep;
-    dT = 20*day;
+    %dT = 10*day;
     dTplot = ceil(T/3);  % plot only every 100th day
     %T = 40*day;
  
