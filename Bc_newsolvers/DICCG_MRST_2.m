@@ -5,19 +5,19 @@
 % programmer: Gabriela Diaz
 % e-mail    : diazcortesgb@gmail.com
 % date      : 09-11-2017
-function [result,flag,res,its,resvec,resulte] = DICCG_MRST(A,b,Z,tol,maxit,M1,M2,x0,varargin)
+function [result,flag,res,its,resvec,resulte] = DICCG_MRST_2(A,b,Z,tol,maxit,M1,M2,x0,varargin)
 %warning on backtrace
 %warning off verbose
 resulte = [];
-opt = struct('Error', 5*1e-1, ...
+opt = struct('Error', 1e-2, ...
 'opts', {{false, false, false, false, false, false,false,false,false,false}}, ...
 'wells', []);
-stag =5;
+
  opt   = merge_options(opt, varargin{:});
  Error = opt.Error;
  opts  = opt.opts;
  W     = opt.wells;
- rmin = 1;
+
  % Display message of options
  dopts      = opts{1}(1);
  % Compute condition number of the matrix A
@@ -108,6 +108,10 @@ EI = inv(E);
 [u]=qvec(Z,EI,b);
 %u = Z*EI*Z'*b;
 
+if(x_true{1})
+    xtrue = A\b;
+    normxtrue = norm(xtrue);
+end
 
 
 
@@ -115,43 +119,15 @@ i = 1;
 x = x0;
 Mb = M1 \ b;
 r = b - A * x;
-res0 = norm(r)/norm(b);
-if(res0 < tol) 
-   disp(['Initial residual  r_0 = ||b-A*xk||_2 /||b||_2< tol: ' num2str(res0) ',' num2str(tol)])
-end
-if(x_true{1})
-    xtrue = A\b;
-    nxt = norm(xtrue);
-    tei = norm(xtrue-x)/nxt;
-    if(tei < tol)
-        disp(['Initial error, ||x_{true}-xk||_2/||x_{true}||_2 < tol: ' num2str(tei) ',' num2str(tol)])        
-    end   
-end
-
-
-nr = norm(r);
 r = defvec(Z,EI,A,r);
-ndr =norm(r);
 %r = P * r;
 r = M1 \ r;
-r0 = M1\ (b - A * x);
-norm(r0)
+res(i,1) = norm(r);
 %p = r;
-res(i,1) = norm(r0);
 p = M2 \ r;
-nmpr = norm(r);
 nb = norm(b);
 nmb = norm(Mb);
-pb = defvec(Z,EI,A,b);
-npb =norm(pb);
-pb = M1 \ pb;
-npmb = norm(pb);
-% tol1 = tol * npmb
-% tol = tol * nmb
-
-if(res(i) < tol) 
-   disp(['Residual after DICCG  r_1 = ||M^{-1}(b-A*xk)||_2/||M^{-1}b||_2 < tol: ' num2str(res(i)/nmb) ',' num2str(tol/nmb)])
-end
+tol = tol * nmb;
 
 if(x_true{1} )
     xk = x;
@@ -159,22 +135,26 @@ if(x_true{1} )
     MAxk = M1 \ (A * xk);
     tresm(i,1) = norm(Mb-MAxk);
     tres(i,1) = norm(b-A*xk);
-    tei = terr(i)/norm(xtrue);  
-    if(res(i) < tol)
-        disp(['True error after DIGGC \epsilon_1 : ||x_{true}-xk||_2 / ||x_{true}||_2 = ' num2str(tei)])        
-    end
 end
 
 
 
-while  (i < maxit) && (res(i,1) > tol)
-  
+if(res(i) < tol) 
+   disp(['DICCG only needs one iteration, initial residual is, r_1 = ||P*M^{-1}(b-A*xk)||_2' num2str(res(i))])
+   if(x_true{1})
+   disp(['True residual is, r_1 = ||b-A*xk||_2: ' num2str(tresm(i))])
+   end
+end
+
+
+while  (i < maxit) && (res(i) > tol)
+   
  %   if(Convergence{1}) & (res(i) < Error)
         % If the residual increases, the approximation will be the previous
         % solution
         xacc = x;
   %  end
-    r0 = r;
+    
     i = i+1;
     w = A * p;
     %PAp = P*(A*p);
@@ -197,55 +177,50 @@ while  (i < maxit) && (res(i,1) > tol)
         MAxk = M1 \ (A * xk);
         tresm(i,1) = norm(Mb-MAxk);
         tres(i,1) = norm(b-A*xk);
-      % true_errori = terr(i)/norm(xtrue);
     end
 
     if(Convergence{1})
-
-          rcn = norm(r);
-       
-
-       if ( rcn < Error) 
-           
-           flagr = 1;
+         [rc]=tdefvec(Z,EI,A,r);
+          rcn = norm(rc);
+          E = Error * nmb;
+        if ( rcn < E)
             % If the residual increases, the approximation will be the previous
             % solution
-            
+            xacc = x;
+            % If the residual increases, the approximation will be the previous
+            % solution           
+            flagr = 1;
+            rmin = res(i-1); %
             %         plot(i,res(i),'*')
             %             hold on
-            rdf = norm(rmin -rcn)
-            srdf = sign(rmin -rcn);
-
+            rdf = norm(rmin -res(i));
+            srdf = sign(rmin -res(i));
 %             figure(1)
-%                          plot(i,rcn,'*')
+%                          plot(i,rdf,'*')
 %                           hold on
 %             
-%                           figure(2)
-%                         plot(i,rmin,'*')
-%                                      hold on
+            %               figure(2)
+            %             plot(i,rmin,'*')
+            %                          hold on
             
-            if (srdf > 0) 
-            xacc = x;        
-            iacc = i;
-            racc = r;
-            flagr = 1;
-            rmin = res(i);
-
+            if (srdf > 0)
+                
+                rmin = res(i);
+                flagr = 1;
+                xacc = x;
             else if (srdf < 0 )
                     
-                    flagr = 2;
+                    flagr = 1;
                     %rmin = res(i-1)
-                    if (rdf > 1*1e-5)
+                    if (rdf > E)
                         
                         flagr = 0;
                     end
                 end
             end
             if flagr == 0
-                warning(['Maximum accuracy is : ' num2str(rmin / nmb)])
+                warning(['Maximum accuracy is : ' num2str(res(i) / nmb)])
                 x =  xacc;
-                r = racc;
-                i = iacc;
                 break
             end
             
@@ -254,10 +229,9 @@ while  (i < maxit) && (res(i,1) > tol)
    
 end
 if (Iter_m{1} )
-    disp(['Accuracy is : ' num2str(res(i) / nmb)])
-    disp(['Number of iterations is: ' num2str(i)])
+disp(['Maximum accuracy is : ' num2str(res(i) / nmb)])
+disp(['Number of iterations is: ' num2str(i)])
 end
-
 %xk = (u+P'*x);
 [xk] = tdefvec(Z,EI,A,x);
 [Qb] = qvec(Z,EI,b);
@@ -267,10 +241,6 @@ Mr = M1 \ (b-A*xk);
 ptr = norm(Mr)/norm(Mb);
 
 
-if(x_true{1})
-    tei = terr(i)/norm(xtrue);
-    disp(['True error is: ||x_{true}-xk||_2 / ||x_{true}||_2 = ' num2str(tei)])
-end
 result = xk;
 flag = 0;
 its = i;

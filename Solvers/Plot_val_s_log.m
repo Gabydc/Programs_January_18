@@ -1,10 +1,9 @@
-function varargout = Plot_val_s(y, varargin)
+function varargout = Plot_val_s_log(y, varargin)
 %%
 % % 1. Marker, 2. Color, 3. Markersize, 4. Linestyle, 5. LineWidth
 % % linestyles = {'none', '-',  '--', '-.', ':' };
 % % markerstyles = {'none', '.', 'o', 'd', '*' '+' 'x' 's'} ;
 % % colors = {'r',  [0 0.7 0], 'b', 'm', [0 0.7 0.7], [0.7 0 0.7], [0.5 0.5 0.7]};
-% % time = (DT:DT:t)/day;
 % optp = { [2 2 3 4 5 6 7], [1 2], 5, [1 2 3 4], [1.8] };
 % Plot_val(preport.extras.DA,'savename','Eigenvalues','optp',optp,'x_lab',...
 %     'Eigs','y_lab', 'log(eig)', 'revx', true,'o_legend', [{'kr_1', 'kr_2'}],...
@@ -30,7 +29,7 @@ colors = {'r',  [0 0.7 0], 'b', 'm', [0 0.7 0.7], [0.7 0 0.7], [0.5 0.5 0.7]};
 
     %%
 opt = struct('optp',  {{ [1 2 3 4 5 6 7], [1 2], 5, [1 2 3 4], [1.8] }}, ...
-    'figure',      0, ...
+    'figure',      1, ...
     'savename', [], ...
     'W',  [], ...
     'titl',   [], ...
@@ -55,23 +54,22 @@ o_ax         = opt.o_ax;
 x            = opt.x;
 o_legend     = opt.o_legend;
 dir          = opt.dir;
-ly = size(y,1)
-figure
-y = double(ts(:,1))
-return
+ly = size(y,1);
+
 figure(nf);
 clf
 file = [savename];
 if (~isempty(x))    
     for i = 1 : ly
-f = plot(x, y(:,i),'Marker',markerstyles{optp{1}(i)},'MarkerEdgeColor', ...
+f = semilogy(x, y{i},'Marker',markerstyles{optp{1}(i)},'MarkerEdgeColor', ...
     colors{optp{2}(i)},'MarkerSize',optp{3} ,  'Linestyle', ...
      linestyles{optp{4}(1)}, 'linewidth', optp{5});
  hold on
     end
 else     
     for i = 1 : ly
-f = plot(y(:,i),'Marker',markerstyles{optp{1}(i)},'MarkerEdgeColor', ...
+
+f = semilogy(y{i},'Marker',markerstyles{optp{1}(i)},'MarkerEdgeColor', ...
     colors{optp{2}(i)},'MarkerSize',optp{3} ,  'Linestyle', ...
      linestyles{optp{4}(1)}, 'linewidth', optp{5});   
  hold on
@@ -105,7 +103,8 @@ else if o_ax == 2
         end
     end
 end
-
-if (~isempty(dir))
-        savefigures(gcf, file, dir)
-end
+% 
+% if (~isempty(dir))
+%     saving =1
+%         savefigures(gcf, file, dir)
+% end

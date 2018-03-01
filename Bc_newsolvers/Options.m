@@ -15,7 +15,7 @@ plot_sol   = false;
 save_res   = true;
 use_wells  = false;
 model_SPE  = false;
-use_cp     = false;
+use_cp     = true;
 window     = true;
 use_agmg   = false;
 

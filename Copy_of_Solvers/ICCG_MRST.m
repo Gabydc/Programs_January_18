@@ -92,7 +92,8 @@ if (nargin < 5) || isempty(maxit)
 end
 
 if (nw > 0)
-    for i = 1 : nw   
+    for i = 1 : nw
+        i;
         n-nw+i;
         bw = b(n-nw+i,1);
         Aw = A(n-nw+i,n-nw+i);
@@ -113,27 +114,17 @@ if (nw > 0)
 end
 
 
+if(x_true{1})
+    xtrue = A\b;
+    normxtrue = norm(xtrue);
+end
+
+
 
 i = 1;
 x = x0;
 Mb = M1 \ b;
 r = b - A * x;
-res0 = norm(r)/norm(b);
-if(res0 < tol) 
-   disp(['Initial residual  r_0 = ||b-A*xk||_2 /||b||_2< tol: ' num2str(res0) ',' num2str(tol)])
-end
-if(x_true{1})
-    xtrue = A\b;
-    nxt = norm(xtrue);
-    tei = norm(xtrue-x)/nxt;
-    if(tei < tol)
-        disp(['Initial error, ||x_{true}-xk||_2/||x_{true}||_2 < tol: ' num2str(tei) ',' num2str(tol)])        
-    end   
-end
-
-
-
-
 r = M1 \ r;
 res(i,1) = norm(r);
 %p = r;
@@ -151,12 +142,10 @@ end
 
 
 if(res(i) < tol)
-    disp(['ICCG only needs one iteration, initial residual is, r_1 = ||P*M^{-1}(b-A*xk)||_2' num2str(res(i))])
+    disp(['DICCG only needs one iteration, initial residual is, r_1 = ||P*M^{-1}(b-A*xk)||_2' num2str(res(i))])
     if(x_true{1})
         disp(['True residual is, r_1 = ||b-A*xk||_2: ' num2str(tresm(i,1))])
     end
-    
-    
 end
 
 while  (i < maxit) && (res(i) > tol)
@@ -217,7 +206,7 @@ end
 
 
 if (Iter_m{1} ) 
-    disp(['Accuracy is : ' num2str(res(i) / nmb)])
+    disp(['Maximum accuracy is : ' num2str(res(i) / nmb)])
     disp(['Number of iterations is: ' num2str(i)])
 end
 
@@ -229,10 +218,7 @@ result = xk;
 flag= 0;
 its =i;
 resvec = res;
-if(x_true{1})
-    tei = terr(i)/norm(xtrue);
-    disp(['True error is: ||x_{true}-xk||_2 / ||x_{true}||_2 = ' num2str(tei)])
-end
+
 if (nw > 0)
     for i = 1 : nw
         result(n-nw+i,1) = pw(n-nw+i,1);

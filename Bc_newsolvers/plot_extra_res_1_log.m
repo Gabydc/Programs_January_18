@@ -1,0 +1,73 @@
+
+
+
+if use_DICCG == 0
+    nm =1;
+else
+    nm = 2;
+end
+
+terr{nm,1}  = preport(dv+1).extras.terr;
+nxtrue(nm)  = norm(preport(dv+1).extras.xtrue);
+nterr{nm,1} = terr{nm,1} / nxtrue(nm);
+tres{nm,1}  = preport(dv+1).extras.tres;
+nb(nm)    = norm(preport(dv+1).extras.b);
+ntres{nm,1}  = tres{nm,1} / nb(nm);
+tresm{nm,1} = preport(dv+1).extras.tresm;
+nresm(nm)   = norm(preport(dv+1).extras.b);
+ntresm{nm,1}  = tresm{nm,1} / nresm(nm);
+res{nm,1} = preport(dv+1).extras.res;
+nmb(nm)   = norm(preport(dv+1).extras.Mb);
+nres{nm,1}  = res{nm,1} / nmb(nm);
+
+  
+
+ylab{1} = ['||M^{-1}r^k||_2'];
+ylab{2} = ['||M^{-1}r^k||_2/||M^{-1}b||_2'];
+Name{1} = ['Residual_mr'];
+Name{2} = ['Relative_Residual_mr'];
+Title{1} = ['Residual ' ylab{1}];
+Title{2} = ['Relative Residual ' ylab{2}];
+
+ylab{3} = '||M^{-1}(b-Ax^k)||_2';
+ylab{4} = '||M^{-1}(b-Ax^k)||_2/||M^{-1}b||_2';
+ylab{5} = '||b-Ax^k||_2';
+ylab{6} = '||b-Ax^k||_2/||b||_2';
+ylab{7} = '||x-x^k||_2';
+ylab{8} = '||x-x^k||_2/||x||_2';
+
+Name{3} = ['True_Residual_r'];
+Name{4} = ['True_Relative_Residual_mr'];
+Name{5} = ['True_Residual_r'];
+Name{6} = ['True_Relative_Residual_r'];
+Name{7} = ['True_Error'];
+Name{8} = ['True_Relative_Error'];
+
+Title{3} = ['True Residual ' ylab{3}];
+Title{4} = ['True Relative Residual ' ylab{4}];
+Title{5} = ['True Residual ' ylab{5}];
+Title{6} = ['True Relative Residual ' ylab{6} ];
+Title{7} = ['True Error ' ylab{7}];
+Title{8} = ['True Relative Error ' ylab{8}];
+
+%linestyles = {'none', '-',  '--', '-.', ':' };
+%markerstyles = {'none', '.', 'o', 'd', '*' '+' 'x' 's'} ;
+%colors = {'r',  [0 0.7 0], 'b', 'm', [0 0.7 0.7], [0.7 0 0.7], [0.5 0.5 0.7]};
+% optp is a vector containing the options to plot
+% the elements are arranged as follows:
+% 1. Marker, 2. Color, 3. Markersize, 4. Linestyle, 5. LineWidth
+% Example
+optp = { [3 7 6 4 5 6 7], [5 4], 5, [1 1 1 1], [1.8] };
+val{2} = nres;
+val{4} = ntresm;
+val{6} = ntres;
+val{8} = nterr;
+for i = [ 2 4 6 8]
+    folder=[ dir2 'extras/' ];
+    mkdir( folder)
+    dir11 = [ folder ];
+    Plot_val_s_log(val{i},'optp',optp,'x_lab',...
+        'Iterations','y_lab',ylab{i},'o_legend', [{['ICCG'], ['DICCG' ] }], ...
+        'revx', false, 'dir', dir11, ...
+        'figure', i, 'titl', Title{i},'o_ax', 2,'savename',Name{i})
+end

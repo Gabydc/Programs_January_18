@@ -1,4 +1,4 @@
-function saveits_pp_lay(dir1,file,use_ICCG,use_DICCG,use_POD,dpod,ts,dv,preport,last, varargin)
+function saveits_pp_lay(dir1,file,use_ICCG,use_DICCG,use_POD,dpod,ts,dv,preport,last,use_cp, varargin)
 opt   = struct('ex', [], ...
                'per', []);
 [opt] = merge_options(opt, varargin{:});
@@ -24,14 +24,27 @@ if ~exist(text, 'file')
     fclose(fileID);
     
 end
+if (use_cp)
+    fileID = fopen(text,'a');
+    fprintf(fileID,'\\noalign{\\smallskip}\\hline\\noalign{\\smallskip}\n');
+    fprintf(fileID,['\\multicolumn{5}{c}{Capillary pressure included}\\\\ \n']);
+    fprintf(fileID,'\\noalign{\\smallskip}\\hline\\noalign{\\smallskip}\n');
+    fclose(fileID);
+end
 
 if (use_ICCG)
     fileID = fopen(text,'a');
     ttits = sum(iter);
     save([dir1  'ttits.mat'],'ttits')
     fprintf(fileID,['$10^{' num2str(per) '} $&' num2str(dv) '&' num2str(ttits) '&' num2str(ttits) '& 0 ' '&' num2str(ttits)  '&' num2str(1) '\\\\ \n']);
-    
+    fclose(fileID);
 else if (use_DICCG)
+             fileID = fopen(text,'a');
+            fprintf(fileID,'\\noalign{\\smallskip}\\hline\\noalign{\\smallskip}\n');
+            fprintf(fileID,['\\multicolumn{5}{c}{' num2str(dv) ' deflation vectors ' num2str(numel(dpod)) ' POD vectors}\\\\ \n']);
+            fprintf(fileID,'\\noalign{\\smallskip}\\hline\\noalign{\\smallskip}\n');
+            fclose(fileID);
+        
         if ex
             
             fileID = fopen(text,'a');

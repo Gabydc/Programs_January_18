@@ -1,24 +1,26 @@
-
+function plot_extras(x,use_DICCG,dir2)
 
 
 if use_DICCG == 0
     nm =1;
-else 
+else
     nm = 2;
 end
 
-terr{nm,1}  = preport(11).extras.terr;
-nxtrue(nm)  = norm(preport(11).extras.xtrue);
+terr{nm,1}  = x.terr;
+nxtrue(nm)  = norm(x.xtrue);
 nterr{nm,1} = terr{nm,1} / nxtrue(nm);
-tres{nm,1}  = preport(11).extras.tres;
-nb(nm)    = norm(preport(11).extras.b);
+tres{nm,1}  = x.tres;
+nb(nm)    = norm(x.b);
 ntres{nm,1}  = tres{nm,1} / nb(nm);
-tresm{nm,1} = preport(11).extras.tresm;
-nresm(nm)   = norm(preport(11).extras.b);
+tresm{nm,1} = x.tresm;
+nresm(nm)   = norm(x.b);
 ntresm{nm,1}  = tresm{nm,1} / nresm(nm);
-res{nm,1} = preport(11).extras.res;
-nmb(nm)   = norm(preport(11).extras.Mb);
+res{nm,1} = x.res;
+nmb(nm)   = norm(x.Mb);
 nres{nm,1}  = res{nm,1} / nmb(nm);
+
+  
 
 ylab{1} = '||M^{-1}r^k||_2';
 ylab{2} = '||M^{-1}r^k||_2/||M^{-1}b||_2';
@@ -61,10 +63,11 @@ val{4} = ntresm;
 val{6} = ntres;
 val{8} = nterr;
 for i = [ 2 4 6 8]
+    a{1} = val{i};
     folder=[ dir2 'extras/' ];
     mkdir( folder)
     dir11 = [ folder ];
-    Plot_val_s(val{i},'optp',optp,'x_lab',...
+    Plot_val_s_log(a{1},'optp',optp,'x_lab',...
         'Iterations','y_lab',ylab{i},'o_legend', [{['ICCG'], ['DICCG' ] }], ...
         'revx', false, 'dir', dir11, ...
         'figure', i, 'titl', Title{i},'o_ax', 2,'savename',Name{i})

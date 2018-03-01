@@ -146,8 +146,8 @@ pb = defvec(Z,EI,A,b);
 npb =norm(pb);
 pb = M1 \ pb;
 npmb = norm(pb);
-% tol1 = tol * npmb
-% tol = tol * nmb
+tol1 = tol * npmb;
+tol = tol * nmb;
 
 if(res(i) < tol) 
    disp(['Residual after DICCG  r_1 = ||M^{-1}(b-A*xk)||_2/||M^{-1}b||_2 < tol: ' num2str(res(i)/nmb) ',' num2str(tol/nmb)])
@@ -201,51 +201,50 @@ while  (i < maxit) && (res(i,1) > tol)
     end
 
     if(Convergence{1})
-
-          rcn = norm(r);
-       
+          pause
+          rcn = norm(r)
+           Error 
+          
 
        if ( rcn < Error) 
            
-           flagr = 1;
+           flagr = 1
             % If the residual increases, the approximation will be the previous
             % solution
             
             %         plot(i,res(i),'*')
             %             hold on
             rdf = norm(rmin -rcn)
-            srdf = sign(rmin -rcn);
-
-%             figure(1)
-%                          plot(i,rcn,'*')
-%                           hold on
-%             
-%                           figure(2)
-%                         plot(i,rmin,'*')
-%                                      hold on
+            srdf = sign(rmin -rcn)
+            rmin
+            figure(1)
+                         plot(i,rcn,'*')
+                          hold on
+            
+                          figure(2)
+                        plot(i,rmin,'*')
+                                     hold on
             
             if (srdf > 0) 
             xacc = x;        
             iacc = i;
             racc = r;
-            flagr = 1;
+            flagr = 1
             rmin = res(i);
 
             else if (srdf < 0 )
                     
-                    flagr = 2;
+                    flagr = 2
                     %rmin = res(i-1)
-                    if (rdf > 1*1e-5)
+                    if (rdf > 3*rmin/10)
                         
-                        flagr = 0;
+                        flagr = 0
                     end
                 end
             end
             if flagr == 0
                 warning(['Maximum accuracy is : ' num2str(rmin / nmb)])
                 x =  xacc;
-                r = racc;
-                i = iacc;
                 break
             end
             

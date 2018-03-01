@@ -24,12 +24,12 @@ else
     xDummy.s = linspace(0, 1, numel(xDummy.s))'; ...
         pc = convertTo(fluid.pc(xDummy), barsa);
 
-title = 'Capillary pressure';
-xlab = 'S_w'; 
-ylab = 'Pc [bar]';
-nf = 2;
-    Plot_2(pc,'x',xDummy.s,'dnames',{{title}},'linestyles','-','o_ax',...
-    2, 'x_lab',xlab,'y_lab', ylab,'figure',nf-1)
+% title = 'Capillary pressure';
+% xlab = 'S_w'; 
+% ylab = 'Pc [bar]';
+% nf = 2;
+%     Plot_2(pc,'x',xDummy.s,'dnames',{{title}},'linestyles','-','o_ax',...
+%     2, 'x_lab',xlab,'y_lab', ylab,'figure',nf-1)
 end
 
 % Plot relative permeability

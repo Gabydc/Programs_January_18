@@ -12,17 +12,16 @@
 % We solve
 % $$\nabla\cdot v = q, \qquad
 %    v=\textbf{--}\frac{K}{\mu} \bigl[\nabla p+\rho g\nabla z\bigr],$$
-for tol = [ 4 6 8]
-for per = [  1  3  6 ]
-    for optls = 1 :3 
+for tol = [ 6]
+for per = [6]
+    for optls = [ 1:2 ]
         
         switch optls
             case 1
                 use_ICCG   = true;
                 use_DICCG  = false;
                 use_POD    = false;
-
-                    
+        
             case 2
                 
               % clear  terr tres tresm  nterr ntres ntresm nres 
@@ -52,18 +51,18 @@ for per = [  1  3  6 ]
         %Initial cell
         [nxi, nyi, nzi] = deal(1, 1, 1);
         if(model_SPE)    % SPE 10
-            layers = 1 : 2;
+            layers = 1 : 1;
             % Create the grid
             [nx, ny, nz] = deal(60, 220, numel(layers));
         else              % Layered model
             % Create the grid
-            [nx, ny, nz] = deal(35, 35,1);
+            [nx, ny, nz] = deal(25, 25, 25);
             % Contrast in permeability layers
             %per = 6;
             % Number of layers
             szl = 7;
             % Direction of the layers
-            l_dir = 'x';
+            l_dir = 'y';
         end
         N = nx*ny*nz;
         [Lx, Ly, Lz] = deal(nx, ny, nz);
@@ -104,8 +103,8 @@ for per = [  1  3  6 ]
         
         %% Temporal variables
         % Time steps
-        DT    = 1*day;
-        nstep = 240;
+        DT    = 5*day;
+        nstep = 11;
         % Solver variables
         %tol= 4;
         tol_p     = 5.0*10^(-tol);
@@ -289,11 +288,12 @@ for per = [  1  3  6 ]
                     linsolve_p = @(A, b) solver.solveLinearSystem(A, b);
                     psolve = @(x) incompTPFA_Def(x, G, T, fluid, 'bc',bc,'LinSolve', linsolve_p,'MatrixOutput',true);
                     
+                    
                 end
                 t0 = tic;
                 [x,preport(k)]= psolve(x);
                 dt_p(k) = toc(t0);
-                
+               
             else if(use_DICCG)
                     use_DICCG
                     if (window)
@@ -310,13 +310,7 @@ for per = [  1  3  6 ]
                                 psolve = @(x) incompTPFA_Def(x, G, T, fluid, 'bc',bc,'LinSolve', linsolve_p,'MatrixOutput',true);
                                 use_ICCG_w = 1
                             end
-                            t0 = tic;
-                            [x,preport(k)]= psolve(x);
-                            dt_p(k) = toc(t0);
-                            POD_V(:,k) = x.pressure;
-                            
-                            
-                            
+ 
                         else
                             %                 % Number of POD vectors
                             %                 if use_POD
@@ -373,23 +367,22 @@ for per = [  1  3  6 ]
                     t0 = tic;
                     [x,preport(k)]= psolve(x);
                     dt_p(k) = toc(t0);
-                    
+                    fprintf('[%02d]: Pressure: %12.5f [s]\n', k, dt_p(k));
                     if(window)
                         POD_V(:,k) = x.pressure;
                     end
                     
                     
-                    
-                    
+                
                     
 
                     %%
-                    %  Plot_mesh(x.pressure, G, 'dnames', {{'Pressurefield'}},'o_daspect',[6 6 1], ...
-                    %     'o_ax', 0, 'l_cb', false, 'o_cb', 1, 'figure', 1, 'showgrid', 1, ...
-                    %     'EA', 0.050, 'FA', 0.375, 'titl', '','x_lab', 'xdir', 'y_lab', 'ydir', ...
-                    %     'inter',   [], 'o_view', [0 90],'o_daspect', [3 3 3],  'o_cb', 1,...
-                    %     'l_cb', [],  'o_ax',  2, 'dir', [])
-                    
+%                      Plot_mesh(x.pressure, G, 'dnames', {{'Pressurefield'}},'o_daspect',[6 6 1], ...
+%                         'o_ax', 0, 'l_cb', false, 'o_cb', 1, 'figure', 1, 'showgrid', 1, ...
+%                         'EA', 0.050, 'FA', 0.375, 'titl', '','x_lab', 'xdir', 'y_lab', 'ydir', ...
+%                         'inter',   [], 'o_view', [0 90],'o_daspect', [3 3 3],  'o_cb', 1,...
+%                         'l_cb', [],  'o_ax',  2, 'dir', [])
+                    %%
                 end
             end
             
@@ -420,15 +413,15 @@ for per = [  1  3  6 ]
                                 end
                                 if model_SPE
                                     
-                                    saveits_pp_spe(dir1,filetx,use_ICCG,use_DICCG,use_POD,dpod,k,dv,preport,last,'ex',ex)
+                                    saveits_pp_spe(dir1,filetx,use_ICCG,use_DICCG,use_POD,dpod,k,dv,preport,last,use_cp,'ex',ex)
                                 else
-                                    saveits_pp_lay(dir1,filetx,use_ICCG,use_DICCG,use_POD,dpod,k,dv,preport,last,'per', per,'ex',ex)
+                                    saveits_pp_lay(dir1,filetx,use_ICCG,use_DICCG,use_POD,dpod,k,dv,preport,last,use_cp,'per', per,'ex',ex)
                                 end
                             else
                                 if model_SPE
-                                    saveits_tp_spe(dir1,filetx,use_ICCG,use_DICCG,use_POD,dpod,k,dv,preport,last,'ex', 'Training')
+                                    saveits_tp_spe(dir1,filetx,use_ICCG,use_DICCG,use_POD,dpod,k,dv,preport,last,use_cp,'ex', 'Training')
                                 else
-                                    saveits_tp_lay(dir1,filetx,use_ICCG,use_DICCG,use_POD,dpod,k,dv,preport,last,'ex', 'Training', 'per', per)
+                                    saveits_tp_lay(dir1,filetx,use_ICCG,use_DICCG,use_POD,dpod,k,dv,preport,last,use_cp,'ex', 'Training', 'per', per)
                                 end
                                 
                             end
@@ -444,7 +437,7 @@ for per = [  1  3  6 ]
                             save(filename,'Pressure') 
                         end
                         if ~use_POD
-                            plot_extra_res_1
+                            plot_extra_res_1_log
                            
                         end
                         

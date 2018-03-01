@@ -39,7 +39,7 @@ solver.tolerance = 5*10^-7;
  x_true  = true;
 disp('ICCG')
 opts = {{true, false, x_true , true, true, true, true, true}};
-[result,flag,res,its,resvec,resulte]  = ICCG_MRST(A,b,...
+[result,flag,res,its,resvec,resulte{1}]  = ICCG_MRST(A,b,...
     solver.tolerance,nel,L,L',solver.x0, ...
     'opts',opts);
 
@@ -47,15 +47,14 @@ opts = {{true, false, x_true , true, true, true, true, true}};
 
 opts = {{true, false, x_true, true, true, true, true, true, true,true}};
 disp('DICCG')
-[result3,flag3,res3,its3,resvec3,resulte3]  = DICCG_MRST(A,b,Z,...
+[result3,flag3,res3,its3,resvec3,resulte{2}]  = DICCG_MRST(A,b,Z,...
     solver.tolerance,nel,L,L',solver.x0, ...
     'opts',opts);
 %%
 for use_DICCG = 1 
 
-rs{1} = resulte;
-
-    plot_extras(resulte,use_DICCG,[])
+    plot_extras(resulte{2},use_DICCG,[])
 % plot_results
 %plot_eigs
  
+end
